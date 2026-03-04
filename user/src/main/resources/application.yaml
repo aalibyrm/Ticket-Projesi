@@ -1,0 +1,22 @@
+server:
+  port: 8085
+
+spring:
+  application:
+    name: user-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8180/realms/TicketRealm
+
+keycloak:
+  server-url: http://localhost:8180
+  realm: TicketRealm
+  client-id: user-service
+  client-secret: 02diH9Dnbh1Om0oytj8WfuIFxBr8YWJb
+  
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
