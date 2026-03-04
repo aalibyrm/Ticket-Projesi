@@ -27,6 +27,7 @@ public class TicketController {
 
 	private final TicketService ticketService;
 
+
 	// Ticket Oluşturma Methodu
 	@PostMapping("create-ticket")
 	@PreAuthorize("hasRole('CUSTOMER')")
@@ -57,9 +58,9 @@ public class TicketController {
 	@PatchMapping("/{id}/assign")
 	@PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
 	public Ticket assignTicket(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
-		String agentId = jwt.getSubject();
 
-		return ticketService.assignTicket(id, agentId);
+
+		return ticketService.assignTicket(id, jwt.getSubject());
 	}
 
 	// Ticketı Müşteri Onayına Gönderme Methodu
@@ -82,5 +83,7 @@ public class TicketController {
 
 		return ticketService.customerDecision(id, approved, userId);
 	}
+
+
 
 }

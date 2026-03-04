@@ -1,51 +1,25 @@
 package com.ticketapp.ticket.controller;
 
-import com.ticketapp.ticket.model.Comment;
-import com.ticketapp.ticket.model.CommentType;
-import com.ticketapp.ticket.repository.CommentRepository;
+import com.ticketapp.ticket.dto.CommentRequestDto;
+import com.ticketapp.ticket.dto.CommentResponseDto;
+import com.ticketapp.ticket.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/ticket/{id}/comments")
+@RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final CommentRepository commentRepository;
+    private final CommentService commentService;
 
-    @PostMapping("create-comment")
-    public Comment createComment(@RequestBody Comment comment, @AuthenticationPrincipal Jwt jwt){
+    // Kullanıcı yorum oluşturma methodu
+    @PostMapping("/{id}/comments")
+    public CommentResponseDto createComment(@PathVariable String id, @RequestBody CommentRequestDto request, @AuthenticationPrincipal Jwt jwt) {
 
-        String userId = jwt.getSubject();
-        comment.setUserId(userId);
-        comment.setCreatedDate(LocalDateTime.now());
-
-        var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
-
-        if(role.contains("CUSTOMER")){
-            comment.setType(CommentType.EXTERNAL);
-        } else {
-            //Burda yapmak istediğim yorum gönderen kişi customersa kesinlikle external ata
-            // destek ekibindense onların tercihi neyse ona göre atama yap
-            if(comment.getType() == CommentType.INTERNAL)
-            {
-                comment.setType(CommentType.INTERNAL);
-            } else {
-                comment.setType(CommentType.EXTERNAL);
-            }
-        }
-
-        Comment savedComment = commentRepository.save(comment);
-
-        return savedComment;
-    };
-
+        return commentService.createComment(id,request, jwt.getSubject());
+    }
 
 }
