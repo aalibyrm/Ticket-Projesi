@@ -18,18 +18,30 @@ public class CommentController {
     private final CommentService commentService;
 
     // Kullanıcı yorum oluşturma methodu
-    @PostMapping("/{ticketId}/comments")
-    public CommentResponseDto createComment(@PathVariable String ticketId, @RequestBody CommentRequestDto request,@AuthenticationPrincipal Jwt jwt) {
+    @PostMapping("/{ticketId}/create-comment")
+    public CommentResponseDto createComment(@PathVariable String ticketId, @RequestBody CommentRequestDto request, @AuthenticationPrincipal Jwt jwt) {
 
-        return commentService.createComment(ticketId,request, jwt.getSubject());
+        return commentService.createComment(ticketId, request, jwt.getSubject());
     }
 
     //Role göre tüm yorumları listeleme
     @GetMapping("/{ticketId}/comments")
-    public List<CommentResponseDto> getCommentsByTicketId(@PathVariable String ticketId,@AuthenticationPrincipal Jwt jwt){
+    public List<CommentResponseDto> getCommentsByTicketId(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
         var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
 
-        return commentService.getCommentsByTicketId(ticketId,role);
+        return commentService.getCommentsByTicketId(ticketId, role);
     }
+
+    @PatchMapping("/{ticketId}/comments/{commentId}")
+    public CommentResponseDto editComment(@PathVariable String ticketId,
+                                          @PathVariable String commentId,
+                                          @AuthenticationPrincipal Jwt jwt,
+                                          @RequestBody CommentRequestDto request,
+                                          @RequestParam boolean changeType) {
+        var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
+
+        return commentService.editComment(ticketId, commentId, jwt.getSubject(), request,role,changeType);
+    }
+
 
 }

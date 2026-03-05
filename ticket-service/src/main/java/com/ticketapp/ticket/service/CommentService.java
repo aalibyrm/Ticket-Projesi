@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final TicketRepository ticketRepository;
     private final CommentMapper commentMapper;
+
 
     public CommentResponseDto createComment(String ticketId, CommentRequestDto request, String userId) {
 
@@ -50,7 +52,6 @@ public class CommentService {
             throw new RuntimeException("Ticket bulunamadı");
         }
 
-        //Kontrol eklencek
         List<Comment> byTicketId = commentRepository.findByTicket_Id(ticketId);
 
         if (role.contains("CUSTOMER")) {
@@ -66,4 +67,46 @@ public class CommentService {
 
 
     }
+
+    public CommentResponseDto editComment(String ticketId, String commentId, String userId, CommentRequestDto request, String role, boolean changeType) {
+
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket bulunmadı"));
+
+        List<Comment> commentList = new ArrayList<>(ticket.getComments());
+
+        //Ticketta istenilen commenti çekmeye çalıştım
+        Comment editedComment = commentList.stream()
+                .filter(c -> c.getId().equals(commentId))
+                .findFirst().orElseThrow(() -> new RuntimeException("Comment bulunmadı"));
+
+        //Comment sahibi mi düzenlemeye çalışıyor kontrolü
+        if (!editedComment.getUserId().equals(userId))
+            throw new RuntimeException("Comment düzenlemeye yetkiniz yok!");
+
+        //Destek ekibinden ise type değiştirme yetkisi olmalı mi??
+        editedComment.setComment(request.getComment());
+
+        //Eğer istek atan kişi destek ekibidindense ve comment type değiştirmek istiyorsa
+        if (!role.contains("CUSTOMER") && changeType) {
+
+            //Internal External değişimi
+            if(editedComment.getType().equals(CommentType.INTERNAL)){
+                editedComment.setType(CommentType.EXTERNAL);
+            } else {
+                editedComment.setType(CommentType.INTERNAL);
+            }
+        }
+
+        Comment savedComment = commentRepository.save(editedComment);
+
+        return new CommentResponseDto(
+                savedComment.getId(),
+                savedComment.getComment(),
+                savedComment.getType(),
+                savedComment.getCreatedDate()
+        );
+    }
+
+
 }

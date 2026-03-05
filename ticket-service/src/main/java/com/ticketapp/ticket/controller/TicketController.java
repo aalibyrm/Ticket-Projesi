@@ -44,39 +44,39 @@ public class TicketController {
 	}
 
 	// Ticket Silme Methodu
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{ticketId}")
 	@PreAuthorize("hasRole('TEAM_LEADER')")
-	public void deleteTicket(@PathVariable String id) {
+	public void deleteTicket(@PathVariable String ticketId) {
 
-		ticketService.deleteTicket(id);
+		ticketService.deleteTicket(ticketId);
 	}
 
 	// Ticket Atama Methodu
-	@PatchMapping("/{id}/assign")
+	@PatchMapping("/{ticketId}/assign")
 	@PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
-	public Ticket assignTicket(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
+	public Ticket assignTicket(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
 
-		return ticketService.assignTicket(id, jwt.getSubject());
+		return ticketService.assignTicket(ticketId, jwt.getSubject());
 	}
 
 	// Ticketı Müşteri Onayına Gönderme Methodu
-	@PatchMapping("/{id}/send-to-approval")
+	@PatchMapping("/{ticketId}/send-to-approval")
 	@PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
-	public Ticket sendToApproval(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
+	public Ticket sendToApproval(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
 
-		return ticketService.sendToApproval(id, jwt.getSubject());
+		return ticketService.sendToApproval(ticketId, jwt.getSubject());
 	}
 
 	// Müşterinin Ticketı Onaylama Methodu
-	@PatchMapping("/{id}/customer-decision")
+	@PatchMapping("/{ticketId}/customer-decision")
 	@PreAuthorize("hasRole('CUSTOMER')")
 	public Ticket customerDecision(
-			@PathVariable String id,
+			@PathVariable String ticketId,
 			@RequestParam boolean approved,
 			@AuthenticationPrincipal Jwt jwt) {
 
 
-		return ticketService.customerDecision(id, approved,  jwt.getSubject());
+		return ticketService.customerDecision(ticketId, approved,  jwt.getSubject());
 	}
 
 
