@@ -148,8 +148,8 @@ public class TicketService {
                     savedTicket.getUserId(),
                     "Müşteri çözümü reddetti. Ticket Agent'a geri gönderildi.");
             ticketProducer.sendMessage(event);
-        };
+        }
 
         return savedTicket;
-    };
+    }
 }

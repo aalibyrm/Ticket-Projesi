@@ -32,18 +32,15 @@ public class TicketController {
 	@PostMapping("create-ticket")
 	@PreAuthorize("hasRole('CUSTOMER')")
 	public Ticket createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal Jwt jwt) {
-		String userId = jwt.getSubject();
 
-		return ticketService.createTicket(ticket, userId);
+		return ticketService.createTicket(ticket, jwt.getSubject());
 	}
 
 	@GetMapping
 	public List<Ticket> getAllTickets(@AuthenticationPrincipal Jwt jwt) {
-
-		String userId = jwt.getSubject();
 		var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
 
-		return ticketService.getAllTickets(userId, role);
+		return ticketService.getAllTickets( jwt.getSubject(), role);
 	}
 
 	// Ticket Silme Methodu
@@ -58,7 +55,6 @@ public class TicketController {
 	@PatchMapping("/{id}/assign")
 	@PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
 	public Ticket assignTicket(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
-
 
 		return ticketService.assignTicket(id, jwt.getSubject());
 	}
@@ -79,9 +75,8 @@ public class TicketController {
 			@RequestParam boolean approved,
 			@AuthenticationPrincipal Jwt jwt) {
 
-		String userId = jwt.getSubject();
 
-		return ticketService.customerDecision(id, approved, userId);
+		return ticketService.customerDecision(id, approved,  jwt.getSubject());
 	}
 
 

@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UserClient {
 
     @GetMapping("/api/v1/users/{id}")
-    UserDto getUserById(@PathVariable("id") String id);
+    UserDto getUserById(@PathVariable String id);
 }

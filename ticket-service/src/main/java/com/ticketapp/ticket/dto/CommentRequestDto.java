@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//Kullanıcıdan yorumu alırken kullan
 public class CommentRequestDto {
     private String comment;
     private CommentType type;
