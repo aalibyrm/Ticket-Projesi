@@ -1,6 +1,9 @@
 package com.ticketapp.ticket.service;
 
+import com.ticketapp.ticket.dto.CommentResponseDto;
+import com.ticketapp.ticket.dto.TicketDetailDto;
 import com.ticketapp.ticket.dto.TicketEventDto;
+import com.ticketapp.ticket.interfaces.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;
@@ -17,6 +20,8 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final TicketProducer ticketProducer;
+    private final CommentService commentService;
+    private final TicketMapper ticketMapper;
 
     @Transactional
     public Ticket createTicket(Ticket ticket, String userId) {
@@ -151,5 +156,18 @@ public class TicketService {
         }
 
         return savedTicket;
+    }
+
+    public TicketDetailDto ticketDetails(String ticketId, String userId, String role) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+
+        if (role.contains("CUSTOMER") && !ticket.getUserId().equals(userId)) {
+            throw new RuntimeException("Bu ticket detaylarını görmeye yetkiniz yok!");
+        }
+
+        List<CommentResponseDto> commentList = commentService.getCommentsByTicketId(ticketId, role);
+
+        return ticketMapper.toTicketDetailDto(ticket, commentList);
     }
 }

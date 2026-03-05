@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CommentMapper {
     CommentResponseDto commentDto(Comment comment);
     List<CommentResponseDto> toDoList (List<Comment> comment);

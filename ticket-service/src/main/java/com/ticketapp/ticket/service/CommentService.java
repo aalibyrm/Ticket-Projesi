@@ -48,10 +48,6 @@ public class CommentService {
 
     public List<CommentResponseDto> getCommentsByTicketId(String ticketId, String role) {
 
-        if (!ticketRepository.existsById(ticketId)) {
-            throw new RuntimeException("Ticket bulunamadı");
-        }
-
         List<Comment> byTicketId = commentRepository.findByTicket_Id(ticketId);
 
         if (role.contains("CUSTOMER")) {
@@ -64,7 +60,6 @@ public class CommentService {
             //Destek ekibi tüm yorumları görür
             return commentMapper.toDoList(byTicketId);
         }
-
 
     }
 
@@ -84,14 +79,13 @@ public class CommentService {
         if (!editedComment.getUserId().equals(userId))
             throw new RuntimeException("Comment düzenlemeye yetkiniz yok!");
 
-        //Destek ekibinden ise type değiştirme yetkisi olmalı mi??
         editedComment.setComment(request.getComment());
 
         //Eğer istek atan kişi destek ekibidindense ve comment type değiştirmek istiyorsa
         if (!role.contains("CUSTOMER") && changeType) {
 
             //Internal External değişimi
-            if(editedComment.getType().equals(CommentType.INTERNAL)){
+            if (editedComment.getType().equals(CommentType.INTERNAL)) {
                 editedComment.setType(CommentType.EXTERNAL);
             } else {
                 editedComment.setType(CommentType.INTERNAL);
