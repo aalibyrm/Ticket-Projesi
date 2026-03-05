@@ -46,10 +46,14 @@ public class CommentService {
 
     public List<CommentResponseDto> getCommentsByTicketId(String ticketId, String role) {
 
+        if (!ticketRepository.existsById(ticketId)) {
+            throw new RuntimeException("Ticket bulunamadı");
+        }
+
         //Kontrol eklencek
         List<Comment> byTicketId = commentRepository.findByTicket_Id(ticketId);
 
-        if(role.contains("CUSTOMER")){
+        if (role.contains("CUSTOMER")) {
             //Müşteri sadece external yorumları görür
             List<Comment> externalComments = byTicketId.stream()
                     .filter(c -> c.getType() == CommentType.EXTERNAL)
@@ -59,5 +63,7 @@ public class CommentService {
             //Destek ekibi tüm yorumları görür
             return commentMapper.toDoList(byTicketId);
         }
+
+
     }
 }
