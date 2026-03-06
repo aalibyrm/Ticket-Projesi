@@ -2,6 +2,7 @@ package com.ticketapp.ticket.interfaces;
 
 import com.ticketapp.ticket.dto.CommentResponseDto;
 import com.ticketapp.ticket.dto.TicketDetailDto;
+import com.ticketapp.ticket.dto.TicketResponseDto;
 import com.ticketapp.ticket.model.Ticket;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -12,4 +13,8 @@ import java.util.List;
 public interface TicketMapper {
     @Mapping(source = "comments", target = "comments")
     TicketDetailDto toTicketDetailDto (Ticket ticket, List<CommentResponseDto> comments);
+
+    TicketResponseDto toTicketResponseDto(Ticket ticket);
+    List<TicketResponseDto> toTicketResponseDtoList(List<Ticket> ticketList);
+
 }

@@ -3,11 +3,11 @@ package com.ticketapp.ticket.service;
 import com.ticketapp.ticket.dto.CommentResponseDto;
 import com.ticketapp.ticket.dto.TicketDetailDto;
 import com.ticketapp.ticket.dto.TicketEventDto;
+import com.ticketapp.ticket.dto.TicketResponseDto;
 import com.ticketapp.ticket.interfaces.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +23,7 @@ public class TicketService {
     private final CommentService commentService;
     private final TicketMapper ticketMapper;
 
-    @Transactional
-    public Ticket createTicket(Ticket ticket, String userId) {
+    public TicketResponseDto createTicket(Ticket ticket, String userId) {
         ticket.setUserId(userId);
 
         ticket.setStatus(TicketStatus.NEW);
@@ -39,21 +38,21 @@ public class TicketService {
                 "Müşteri yeni bir ticket oluşturdu.");
         ticketProducer.sendMessage(event);
 
-        return savedTicket;
+        return ticketMapper.toTicketResponseDto(savedTicket);
     }
 
-    @Transactional
-    public List<Ticket> getAllTickets(String userId, String role) {
+    public List<TicketResponseDto> getAllTickets(String userId, String role) {
         // Müşteri istek attıysa kendi biletlerini görür
         if (role.contains("CUSTOMER") && !role.contains("AGENT") && !role.contains("TEAM_LEADER")) {
-            return ticketRepository.findByUserId(userId);
-        }
+            List<Ticket> ticketList = ticketRepository.findByUserId(userId);
 
+            return ticketMapper.toTicketResponseDtoList(ticketList);
+        }
+        List<Ticket> ticketList = ticketRepository.findAll();
         // Şimdilik destek ekibi tüm biletleri görebilir.
-        return ticketRepository.findAll();
+        return ticketMapper.toTicketResponseDtoList(ticketList);
     }
 
-    @Transactional
     public void deleteTicket(String id) {
 
         Ticket ticket = ticketRepository.findById(id)
@@ -67,11 +66,9 @@ public class TicketService {
         ticketProducer.sendMessage(event);
 
         ticketRepository.deleteById(id);
-
     }
 
-    @Transactional
-    public Ticket assignTicket(String ticketId, String agentId) {
+    public TicketResponseDto assignTicket(String ticketId, String agentId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
@@ -88,11 +85,10 @@ public class TicketService {
                 "Ticket bir Agent'a atandı.");
         ticketProducer.sendMessage(event);
 
-        return savedTicket;
+        return ticketMapper.toTicketResponseDto(savedTicket);
     }
 
-    @Transactional
-    public Ticket sendToApproval(String id, String agentId) {
+    public TicketResponseDto sendToApproval(String id, String agentId) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
 
@@ -113,11 +109,10 @@ public class TicketService {
                 "Ticket müşteri onayına gönderildi.");
         ticketProducer.sendMessage(event);
 
-        return savedTicket;
+        return ticketMapper.toTicketResponseDto(savedTicket);
     }
 
-    @Transactional
-    public Ticket customerDecision(String ticketId, boolean approved, String userId) {
+    public TicketResponseDto customerDecision(String ticketId, boolean approved, String userId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
@@ -155,7 +150,7 @@ public class TicketService {
             ticketProducer.sendMessage(event);
         }
 
-        return savedTicket;
+        return ticketMapper.toTicketResponseDto(savedTicket);
     }
 
     public TicketDetailDto ticketDetails(String ticketId, String userId, String role) {

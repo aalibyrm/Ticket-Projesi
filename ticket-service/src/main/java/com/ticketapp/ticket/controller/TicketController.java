@@ -3,6 +3,7 @@ package com.ticketapp.ticket.controller;
 import java.util.List;
 
 import com.ticketapp.ticket.dto.TicketDetailDto;
+import com.ticketapp.ticket.dto.TicketResponseDto;
 import com.ticketapp.ticket.service.TicketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,17 +29,16 @@ public class TicketController {
 
     private final TicketService ticketService;
 
-
     // Ticket Oluşturma Methodu
     @PostMapping("create-ticket")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public Ticket createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal Jwt jwt) {
+    public TicketResponseDto createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal Jwt jwt) {
 
         return ticketService.createTicket(ticket, jwt.getSubject());
     }
 
     @GetMapping
-    public List<Ticket> getAllTickets(@AuthenticationPrincipal Jwt jwt) {
+    public List<TicketResponseDto> getAllTickets(@AuthenticationPrincipal Jwt jwt) {
         var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
 
         return ticketService.getAllTickets(jwt.getSubject(), role);
@@ -55,7 +55,7 @@ public class TicketController {
     // Ticket Atama Methodu
     @PatchMapping("/{ticketId}/assign")
     @PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
-    public Ticket assignTicket(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
+    public TicketResponseDto assignTicket(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
 
         return ticketService.assignTicket(ticketId, jwt.getSubject());
     }
@@ -63,7 +63,7 @@ public class TicketController {
     // Ticketı Müşteri Onayına Gönderme Methodu
     @PatchMapping("/{ticketId}/send-to-approval")
     @PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
-    public Ticket sendToApproval(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
+    public TicketResponseDto sendToApproval(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
 
         return ticketService.sendToApproval(ticketId, jwt.getSubject());
     }
@@ -71,7 +71,7 @@ public class TicketController {
     // Müşterinin Ticketı Onaylama Methodu
     @PatchMapping("/{ticketId}/customer-decision")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public Ticket customerDecision(
+    public TicketResponseDto customerDecision(
             @PathVariable String ticketId,
             @RequestParam boolean approved,
             @AuthenticationPrincipal Jwt jwt) {
