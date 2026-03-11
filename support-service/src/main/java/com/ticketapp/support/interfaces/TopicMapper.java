@@ -9,4 +9,5 @@ import org.mapstruct.Mapper;
 public interface TopicMapper {
     Topic topicDto(TopicRequestDto topicRequestDto);
     TopicResponseDto topicResponseDto(Topic topic);
+
 }

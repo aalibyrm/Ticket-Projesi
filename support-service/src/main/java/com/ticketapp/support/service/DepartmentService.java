@@ -13,7 +13,7 @@ import com.ticketapp.support.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,14 +24,13 @@ public class DepartmentService {
     private final DepartmentMapper departmentMapper;
     private final TopicMapper topicMapper;
 
-    //Dto düzenle
-    public Department findDepartmentByTopic(Long topicId) {
+    public DepartmentResponseDto findDepartmentByTopic(Long topicId) {
 
         Topic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new RuntimeException("Topic bulunamadı: " + topicId));
 
-        //Topic zaten deparment tuttuğu için return edilir
-        return topic.getDepartment();
+        // Topic zaten deparment tuttuğu için return edilir
+        return departmentMapper.departmentResponseDto(topic.getDepartment());
     }
 
     public DepartmentResponseDto createDepartment(DepartmentRequestDto departmentRequestDto) {
@@ -52,8 +51,7 @@ public class DepartmentService {
                 .orElseThrow(() -> new RuntimeException("Department bulunamadı"));
 
         if (department.getTopicList().stream()
-                .anyMatch(t -> t.getName().equals(topicRequestDto.getName()))
-        ) {
+                .anyMatch(t -> t.getName().equals(topicRequestDto.getName()))) {
             throw new RuntimeException("Departman zaten bu topic'e sahip!");
         }
 
@@ -62,5 +60,10 @@ public class DepartmentService {
         Topic savedTopic = topicRepository.save(topic);
 
         return topicMapper.topicResponseDto(savedTopic);
+    }
+
+    public List<DepartmentResponseDto> listAllDepartments() {
+
+        return departmentMapper.toResponseDtoList(departmentRepository.findAll());
     }
 }
