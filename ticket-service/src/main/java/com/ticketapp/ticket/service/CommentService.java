@@ -29,21 +29,10 @@ public class CommentService {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
 
-        Comment comment = new Comment();
-        comment.setComment(request.getComment());
-        comment.setType(request.getType());
-        comment.setUserId(userId);
-        comment.setTicket(ticket);
-        comment.setCreatedDate(LocalDateTime.now());
-
+        Comment comment = commentMapper.commentDto(request);
         Comment savedComment = commentRepository.save(comment);
 
-        return new CommentResponseDto(
-                savedComment.getId(),
-                savedComment.getComment(),
-                savedComment.getType(),
-                LocalDateTime.now()
-        );
+        return commentMapper.commentResponseDto(savedComment);
     }
 
     public List<CommentResponseDto> getCommentsByTicketId(String ticketId, String role) {
@@ -94,12 +83,7 @@ public class CommentService {
 
         Comment savedComment = commentRepository.save(editedComment);
 
-        return new CommentResponseDto(
-                savedComment.getId(),
-                savedComment.getComment(),
-                savedComment.getType(),
-                savedComment.getCreatedDate()
-        );
+        return commentMapper.commentResponseDto(savedComment);
     }
 
 
