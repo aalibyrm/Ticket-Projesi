@@ -1,4 +1,4 @@
-package com.ticketapp.support_service;
+package com.ticketapp.support;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
