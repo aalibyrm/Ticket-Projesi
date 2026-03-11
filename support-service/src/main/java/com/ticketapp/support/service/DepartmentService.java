@@ -2,13 +2,18 @@ package com.ticketapp.support.service;
 
 import com.ticketapp.support.dto.DepartmentRequestDto;
 import com.ticketapp.support.dto.DepartmentResponseDto;
+import com.ticketapp.support.dto.TopicRequestDto;
+import com.ticketapp.support.dto.TopicResponseDto;
 import com.ticketapp.support.interfaces.DepartmentMapper;
+import com.ticketapp.support.interfaces.TopicMapper;
 import com.ticketapp.support.model.Department;
 import com.ticketapp.support.model.Topic;
 import com.ticketapp.support.repository.DepartmentRepository;
 import com.ticketapp.support.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -17,9 +22,10 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
     private final TopicRepository topicRepository;
     private final DepartmentMapper departmentMapper;
+    private final TopicMapper topicMapper;
 
     //Dto düzenle
-    public Department findDepartmentByTopic(Long topicId){
+    public Department findDepartmentByTopic(Long topicId) {
 
         Topic topic = topicRepository.findById(topicId)
                 .orElseThrow(() -> new RuntimeException("Topic bulunamadı: " + topicId));
@@ -28,9 +34,9 @@ public class DepartmentService {
         return topic.getDepartment();
     }
 
-    public DepartmentResponseDto createDepartment(DepartmentRequestDto departmentRequestDto){
+    public DepartmentResponseDto createDepartment(DepartmentRequestDto departmentRequestDto) {
 
-        if(departmentRepository.existsByName(departmentRequestDto.getName()) ) {
+        if (departmentRepository.existsByName(departmentRequestDto.getName())) {
             throw new RuntimeException("Bu departman zaten var!");
         }
 
@@ -38,9 +44,23 @@ public class DepartmentService {
         Department savedDepartment = departmentRepository.save(department);
 
         return departmentMapper.departmentResponseDto(savedDepartment);
-
-
     }
 
+    public TopicResponseDto addTopicToDepartment(Long departmentId, TopicRequestDto topicRequestDto) {
 
+        Department department = departmentRepository.findById(departmentId)
+                .orElseThrow(() -> new RuntimeException("Department bulunamadı"));
+
+        if (department.getTopicList().stream()
+                .anyMatch(t -> t.getName().equals(topicRequestDto.getName()))
+        ) {
+            throw new RuntimeException("Departman zaten bu topic'e sahip!");
+        }
+
+        Topic topic = topicMapper.topicDto(topicRequestDto);
+        topic.setDepartment(department);
+        Topic savedTopic = topicRepository.save(topic);
+
+        return topicMapper.topicResponseDto(savedTopic);
+    }
 }
