@@ -10,6 +10,8 @@ import com.ticketapp.support.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -32,6 +34,13 @@ public class TeamService {
         Team savedTeam = teamRepository.save(team);
 
         return teamMapper.teamResponseDto(savedTeam);
+    }
+
+    public List<TeamResponseDto> getTeamsByDepartment(Long departmentId){
+
+        List<Team> teams = teamRepository.findTeamsByDepartmentId(departmentId);
+
+        return teamMapper.toResponseDto(teams);
     }
 }
 
