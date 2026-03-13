@@ -14,6 +14,8 @@ import com.ticketapp.support.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -62,6 +64,12 @@ public class TeamService {
 
         TeamMember teamMember = teamMemberRepository.findByTeamIdAndKeycloakUserId(teamId,keycloakUserId);
         teamMemberRepository.delete(teamMember);
+    }
+
+    public List<TeamMemberResDto> getMembersByTeam(Long teamId){
+        List<TeamMember> memberList = teamMemberRepository.findByTeamId(teamId);
+
+        return teamMemberMapper.toResDto(memberList);
     }
 
 }

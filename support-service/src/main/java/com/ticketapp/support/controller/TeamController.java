@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -32,4 +34,8 @@ public class TeamController {
     public void removeMember(@PathVariable Long teamId,@PathVariable String keycloakUserId){
         teamService.removeMember(teamId, keycloakUserId);
     }
+
+    @GetMapping("/{teamId}/members")
+    public List<TeamMemberResDto> getMembersByTeam(@PathVariable Long teamId)
+    {return teamService.getMembersByTeam(teamId);}
 }
