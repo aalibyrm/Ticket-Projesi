@@ -42,4 +42,10 @@ public class Ticket {
 
 	@OneToMany(mappedBy = "ticket")
 	private List<Comment> comments = new ArrayList<>();
+
+	@Column(name = "department_id")
+	private Long departmentId;
+
+	@Column(name = "team_id")
+	private Long teamId;
 }

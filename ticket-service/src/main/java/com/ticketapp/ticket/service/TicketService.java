@@ -1,9 +1,7 @@
 package com.ticketapp.ticket.service;
 
-import com.ticketapp.ticket.dto.CommentResponseDto;
-import com.ticketapp.ticket.dto.TicketDetailDto;
-import com.ticketapp.ticket.dto.TicketEventDto;
-import com.ticketapp.ticket.dto.TicketResponseDto;
+import com.ticketapp.ticket.dto.*;
+import com.ticketapp.ticket.interfaces.SupportClient;
 import com.ticketapp.ticket.interfaces.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
@@ -11,7 +9,6 @@ import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,12 +19,17 @@ public class TicketService {
     private final TicketProducer ticketProducer;
     private final CommentService commentService;
     private final TicketMapper ticketMapper;
+    private final SupportClient supportClient;
 
-    public TicketResponseDto createTicket(Ticket ticket, String userId) {
+    public TicketResponseDto createTicket(TicketRequestDto requestDto, String userId) {
+        DepartmentResponseDto departmentResponseDto = supportClient.getDepartmentByTopic(requestDto.getTopicId());
+        TeamResponseDto teamResponseDto = supportClient.assignTeam(departmentResponseDto.getId());
+        Ticket ticket = ticketMapper.ticketDto(requestDto);
+
+        ticket.setDepartmentId(departmentResponseDto.getId());
+        ticket.setTeamId(teamResponseDto.getId());
         ticket.setUserId(userId);
-
         ticket.setStatus(TicketStatus.NEW);
-        ticket.setCreatedDate(LocalDateTime.now());
 
         Ticket savedTicket = ticketRepository.save(ticket);
 

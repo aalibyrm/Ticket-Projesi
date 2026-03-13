@@ -45,4 +45,9 @@ public class TeamController {
     public boolean isUserInTeam(@PathVariable Long teamId, @PathVariable String keycloakUserId) {
         return teamService.isUserInTeam(teamId, keycloakUserId);
     }
+
+    @GetMapping("/assign-team/{departmentId}")
+    public TeamResponseDto assignTeam(@PathVariable Long departmentId){
+        return teamService.assignTeam(departmentId);
+    }
 }

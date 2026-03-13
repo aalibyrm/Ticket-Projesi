@@ -3,6 +3,7 @@ package com.ticketapp.ticket.controller;
 import java.util.List;
 
 import com.ticketapp.ticket.dto.TicketDetailDto;
+import com.ticketapp.ticket.dto.TicketRequestDto;
 import com.ticketapp.ticket.dto.TicketResponseDto;
 import com.ticketapp.ticket.service.TicketService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ticketapp.ticket.model.Ticket;
-
 
 @RestController
 @RequestMapping("/api/v1/tickets")
@@ -32,9 +31,9 @@ public class TicketController {
     // Ticket Oluşturma Methodu
     @PostMapping("create-ticket")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public TicketResponseDto createTicket(@RequestBody Ticket ticket, @AuthenticationPrincipal Jwt jwt) {
+    public TicketResponseDto createTicket(@RequestBody TicketRequestDto requestDto, @AuthenticationPrincipal Jwt jwt) {
 
-        return ticketService.createTicket(ticket, jwt.getSubject());
+        return ticketService.createTicket(requestDto, jwt.getSubject());
     }
 
     @GetMapping

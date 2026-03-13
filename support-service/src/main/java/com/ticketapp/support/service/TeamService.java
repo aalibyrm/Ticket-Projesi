@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -76,6 +77,18 @@ public class TeamService {
 
     public boolean isUserInTeam(Long teamId, String keycloakUserId) {
         return teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId);
+    }
+
+    public TeamResponseDto assignTeam(Long departmentId){
+        List<Team> teams = teamRepository.findTeamsByDepartmentId(departmentId);
+        if (teams.isEmpty()) {
+            throw new RuntimeException("Bu departmanda ekip bulunamadı!");
+        }
+
+        int randomIndex = ThreadLocalRandom.current().nextInt(teams.size());
+        Team team = teams.get(randomIndex);
+
+        return teamMapper.teamResponseDto(team);
     }
 }
 
