@@ -14,7 +14,6 @@ import com.ticketapp.support.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class TeamService {
@@ -55,6 +54,14 @@ public class TeamService {
         TeamMember saved = teamMemberRepository.save(teamMember);
 
         return teamMemberMapper.memberDto(saved);
+    }
+
+    public void removeMember(Long teamId, String keycloakUserId){
+        if(!teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId,keycloakUserId))
+        {throw new RuntimeException("Kullanıcı bu ekipten değil!");}
+
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndKeycloakUserId(teamId,keycloakUserId);
+        teamMemberRepository.delete(teamMember);
     }
 
 }

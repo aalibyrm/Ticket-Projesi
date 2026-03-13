@@ -27,4 +27,9 @@ public class TeamController {
     public TeamMemberResDto addMember(@PathVariable Long teamId,@RequestBody TeamMemberReqDto dto){
         return teamService.addMember(teamId , dto.getKeycloakUserId());
     }
+
+    @DeleteMapping("/{teamId}/members/{keycloakUserId}")
+    public void removeMember(@PathVariable Long teamId,@PathVariable String keycloakUserId){
+        teamService.removeMember(teamId, keycloakUserId);
+    }
 }
