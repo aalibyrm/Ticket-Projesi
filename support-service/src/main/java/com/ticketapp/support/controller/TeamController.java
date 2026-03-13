@@ -1,5 +1,7 @@
 package com.ticketapp.support.controller;
 
+import com.ticketapp.support.dto.TeamMemberReqDto;
+import com.ticketapp.support.dto.TeamMemberResDto;
 import com.ticketapp.support.dto.TeamRequestDto;
 import com.ticketapp.support.dto.TeamResponseDto;
 import com.ticketapp.support.service.TeamService;
@@ -20,4 +22,9 @@ public class TeamController {
         return teamService.createTeam(dto);
     }
 
+    @PostMapping("/{teamId}/members")
+    @ResponseStatus(HttpStatus.CREATED)
+    public TeamMemberResDto addMember(@PathVariable Long teamId,@RequestBody TeamMemberReqDto dto){
+        return teamService.addMember(teamId , dto.getKeycloakUserId());
+    }
 }

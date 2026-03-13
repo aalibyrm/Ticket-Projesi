@@ -1,11 +1,15 @@
 package com.ticketapp.support.service;
 
+import com.ticketapp.support.dto.TeamMemberResDto;
 import com.ticketapp.support.dto.TeamRequestDto;
 import com.ticketapp.support.dto.TeamResponseDto;
 import com.ticketapp.support.interfaces.TeamMapper;
+import com.ticketapp.support.interfaces.TeamMemberMapper;
 import com.ticketapp.support.model.Department;
 import com.ticketapp.support.model.Team;
+import com.ticketapp.support.model.TeamMember;
 import com.ticketapp.support.repository.DepartmentRepository;
+import com.ticketapp.support.repository.TeamMemberRepository;
 import com.ticketapp.support.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,8 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final DepartmentRepository departmentRepository;
     private final TeamMapper teamMapper;
+    private final TeamMemberRepository teamMemberRepository;
+    private final TeamMemberMapper teamMemberMapper;
 
     public TeamResponseDto createTeam(TeamRequestDto teamRequestDto){
 
@@ -33,6 +39,22 @@ public class TeamService {
         Team savedTeam = teamRepository.save(team);
 
         return teamMapper.teamResponseDto(savedTeam);
+    }
+
+    public TeamMemberResDto addMember(Long teamId, String keycloakUserId){
+        Team team = teamRepository.findById(teamId)
+                .orElseThrow(() -> new RuntimeException("Team bulunamadı!"));
+
+        if(teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId,keycloakUserId))
+        {throw new RuntimeException("Bu kullanıcı zaten ekipte!");}
+
+        TeamMember teamMember = new TeamMember();
+        teamMember.setTeam(team);
+        teamMember.setKeycloakUserId(keycloakUserId);
+
+        TeamMember saved = teamMemberRepository.save(teamMember);
+
+        return teamMemberMapper.memberDto(saved);
     }
 
 }
