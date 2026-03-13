@@ -1,14 +1,14 @@
 package com.ticketapp.support.service;
 
-import com.ticketapp.support.dto.DepartmentRequestDto;
-import com.ticketapp.support.dto.DepartmentResponseDto;
-import com.ticketapp.support.dto.TopicRequestDto;
-import com.ticketapp.support.dto.TopicResponseDto;
+import com.ticketapp.support.dto.*;
 import com.ticketapp.support.interfaces.DepartmentMapper;
+import com.ticketapp.support.interfaces.TeamMapper;
 import com.ticketapp.support.interfaces.TopicMapper;
 import com.ticketapp.support.model.Department;
+import com.ticketapp.support.model.Team;
 import com.ticketapp.support.model.Topic;
 import com.ticketapp.support.repository.DepartmentRepository;
+import com.ticketapp.support.repository.TeamRepository;
 import com.ticketapp.support.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,8 @@ public class DepartmentService {
     private final TopicRepository topicRepository;
     private final DepartmentMapper departmentMapper;
     private final TopicMapper topicMapper;
+    private final TeamRepository teamRepository;
+    private final TeamMapper teamMapper;
 
     public DepartmentResponseDto findDepartmentByTopic(Long topicId) {
 
@@ -63,7 +65,13 @@ public class DepartmentService {
     }
 
     public List<DepartmentResponseDto> listAllDepartments() {
-
         return departmentMapper.toResponseDtoList(departmentRepository.findAll());
     }
+
+    public List<TeamResponseDto> getTeamsByDepartment(Long departmentId){
+        List<Team> teams = teamRepository.findTeamsByDepartmentId(departmentId);
+
+        return teamMapper.toResponseDto(teams);
+    }
+
 }

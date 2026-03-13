@@ -1,9 +1,6 @@
 package com.ticketapp.support.controller;
 
-import com.ticketapp.support.dto.DepartmentRequestDto;
-import com.ticketapp.support.dto.DepartmentResponseDto;
-import com.ticketapp.support.dto.TopicRequestDto;
-import com.ticketapp.support.dto.TopicResponseDto;
+import com.ticketapp.support.dto.*;
 import com.ticketapp.support.service.DepartmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,5 +34,10 @@ public class DepartmentController {
     @GetMapping("/by-topic/{topicId}")
     public DepartmentResponseDto getDepartmentByTopic(@PathVariable Long topicId){
         return departmentService.findDepartmentByTopic(topicId);
+    }
+
+    @GetMapping("/{departmentId}/teams")
+    public List<TeamResponseDto> getTeamsByDepartment(@PathVariable Long departmentId){
+        return departmentService.getTeamsByDepartment(departmentId);
     }
 }
