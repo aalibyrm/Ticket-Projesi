@@ -26,7 +26,7 @@ public class TeamService {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamMemberMapper teamMemberMapper;
 
-    public TeamResponseDto createTeam(TeamRequestDto teamRequestDto){
+    public TeamResponseDto createTeam(TeamRequestDto teamRequestDto) {
 
         if (teamRepository.existsByName(teamRequestDto.getName())) {
             throw new RuntimeException("Bu team zaten var!");
@@ -42,12 +42,13 @@ public class TeamService {
         return teamMapper.teamResponseDto(savedTeam);
     }
 
-    public TeamMemberResDto addMember(Long teamId, String keycloakUserId){
+    public TeamMemberResDto addMember(Long teamId, String keycloakUserId) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new RuntimeException("Team bulunamadı!"));
 
-        if(teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId,keycloakUserId))
-        {throw new RuntimeException("Bu kullanıcı zaten ekipte!");}
+        if (teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId)) {
+            throw new RuntimeException("Bu kullanıcı zaten ekipte!");
+        }
 
         TeamMember teamMember = new TeamMember();
         teamMember.setTeam(team);
@@ -58,19 +59,23 @@ public class TeamService {
         return teamMemberMapper.memberDto(saved);
     }
 
-    public void removeMember(Long teamId, String keycloakUserId){
-        if(!teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId,keycloakUserId))
-        {throw new RuntimeException("Kullanıcı bu ekipten değil!");}
+    public void removeMember(Long teamId, String keycloakUserId) {
+        if (!teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId)) {
+            throw new RuntimeException("Kullanıcı bu ekipten değil!");
+        }
 
-        TeamMember teamMember = teamMemberRepository.findByTeamIdAndKeycloakUserId(teamId,keycloakUserId);
+        TeamMember teamMember = teamMemberRepository.findByTeamIdAndKeycloakUserId(teamId, keycloakUserId);
         teamMemberRepository.delete(teamMember);
     }
 
-    public List<TeamMemberResDto> getMembersByTeam(Long teamId){
+    public List<TeamMemberResDto> getMembersByTeam(Long teamId) {
         List<TeamMember> memberList = teamMemberRepository.findByTeamId(teamId);
 
         return teamMemberMapper.toResDto(memberList);
     }
 
+    public boolean isUserInTeam(Long teamId, String keycloakUserId) {
+        return teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId);
+    }
 }
 

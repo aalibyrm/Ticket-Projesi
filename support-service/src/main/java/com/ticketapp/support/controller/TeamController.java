@@ -20,22 +20,29 @@ public class TeamController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeamResponseDto createTeam(@RequestBody TeamRequestDto dto){
+    public TeamResponseDto createTeam(@RequestBody TeamRequestDto dto) {
         return teamService.createTeam(dto);
     }
 
     @PostMapping("/{teamId}/members")
     @ResponseStatus(HttpStatus.CREATED)
-    public TeamMemberResDto addMember(@PathVariable Long teamId,@RequestBody TeamMemberReqDto dto){
-        return teamService.addMember(teamId , dto.getKeycloakUserId());
+    public TeamMemberResDto addMember(@PathVariable Long teamId, @RequestBody TeamMemberReqDto dto) {
+        return teamService.addMember(teamId, dto.getKeycloakUserId());
     }
 
     @DeleteMapping("/{teamId}/members/{keycloakUserId}")
-    public void removeMember(@PathVariable Long teamId,@PathVariable String keycloakUserId){
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void removeMember(@PathVariable Long teamId, @PathVariable String keycloakUserId) {
         teamService.removeMember(teamId, keycloakUserId);
     }
 
     @GetMapping("/{teamId}/members")
-    public List<TeamMemberResDto> getMembersByTeam(@PathVariable Long teamId)
-    {return teamService.getMembersByTeam(teamId);}
+    public List<TeamMemberResDto> getMembersByTeam(@PathVariable Long teamId) {
+        return teamService.getMembersByTeam(teamId);
+    }
+
+    @GetMapping("/{teamId}/members/{keycloakUserId}/check")
+    public boolean isUserInTeam(@PathVariable Long teamId, @PathVariable String keycloakUserId) {
+        return teamService.isUserInTeam(teamId, keycloakUserId);
+    }
 }
