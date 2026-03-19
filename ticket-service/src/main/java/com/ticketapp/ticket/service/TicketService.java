@@ -20,6 +20,7 @@ public class TicketService {
     private final CommentService commentService;
     private final TicketMapper ticketMapper;
     private final SupportClient supportClient;
+    private final TicketProcessService ticketProcessService;
 
     public TicketResponseDto createTicket(TicketRequestDto requestDto, String userId) {
         DepartmentResponseDto departmentResponseDto = supportClient.getDepartmentByTopic(requestDto.getTopicId());
@@ -29,7 +30,7 @@ public class TicketService {
         ticket.setDepartmentId(departmentResponseDto.getId());
         ticket.setTeamId(teamResponseDto.getId());
         ticket.setUserId(userId);
-        ticket.setStatus(TicketStatus.NEW);
+        //ticket.setStatus(TicketStatus.NEW);
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
@@ -39,6 +40,9 @@ public class TicketService {
                 savedTicket.getUserId(),
                 "Müşteri yeni bir ticket oluşturdu.");
         ticketProducer.sendMessage(event);
+
+        ticketProcessService.startTicketProcess(savedTicket.getId(),
+                savedTicket.getPriority().name());
 
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
