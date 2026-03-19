@@ -11,7 +11,6 @@ import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +22,12 @@ public class CommentService {
     private final TicketRepository ticketRepository;
     private final CommentMapper commentMapper;
 
-
     public CommentResponseDto createComment(String ticketId, CommentRequestDto request, String userId) {
+        //Müşteriler için kendisinin olmayan ticketa yorum atma kontrolu eklencek
 
-        Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+        if (ticketRepository.findById(ticketId).isEmpty()) {
+            throw new RuntimeException("Ticket bulunamadı");
+        }
 
         Comment comment = commentMapper.commentDto(request);
         Comment savedComment = commentRepository.save(comment);
@@ -40,40 +40,42 @@ public class CommentService {
         List<Comment> byTicketId = commentRepository.findByTicket_Id(ticketId);
 
         if (role.contains("CUSTOMER")) {
-            //Müşteri sadece external yorumları görür
+            // Müşteri sadece external yorumları görür
             List<Comment> externalComments = byTicketId.stream()
                     .filter(c -> c.getType() == CommentType.EXTERNAL)
                     .toList();
             return commentMapper.toDoList(externalComments);
         } else {
-            //Destek ekibi tüm yorumları görür
+            // Destek ekibi tüm yorumları görür
             return commentMapper.toDoList(byTicketId);
         }
 
     }
 
-    public CommentResponseDto editComment(String ticketId, String commentId, String userId, CommentRequestDto request, String role, boolean changeType) {
+    public CommentResponseDto editComment(String ticketId, String commentId, String userId, CommentRequestDto request,
+            String role, boolean changeType) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunmadı"));
 
         List<Comment> commentList = new ArrayList<>(ticket.getComments());
 
-        //Ticketta istenilen commenti çekmeye çalıştım
+        // Ticketta istenilen commenti çekmeye çalıştım
         Comment editedComment = commentList.stream()
                 .filter(c -> c.getId().equals(commentId))
                 .findFirst().orElseThrow(() -> new RuntimeException("Comment bulunmadı"));
 
-        //Comment sahibi mi düzenlemeye çalışıyor kontrolü
+        // Comment sahibi mi düzenlemeye çalışıyor kontrolü
         if (!editedComment.getUserId().equals(userId))
             throw new RuntimeException("Comment düzenlemeye yetkiniz yok!");
 
         editedComment.setComment(request.getComment());
 
-        //Eğer istek atan kişi destek ekibidindense ve comment type değiştirmek istiyorsa
+        // Eğer istek atan kişi destek ekibidindense ve comment type değiştirmek
+        // istiyorsa
         if (!role.contains("CUSTOMER") && changeType) {
 
-            //Internal External değişimi
+            // Internal External değişimi
             if (editedComment.getType().equals(CommentType.INTERNAL)) {
                 editedComment.setType(CommentType.EXTERNAL);
             } else {
@@ -85,6 +87,5 @@ public class CommentService {
 
         return commentMapper.commentResponseDto(savedComment);
     }
-
 
 }

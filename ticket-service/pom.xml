@@ -51,6 +51,8 @@
 			<version>1.5.5.Final</version>
 		</dependency>
 
+		
+
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
@@ -73,6 +75,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>io.camunda</groupId>
+			<artifactId>zeebe-client-java</artifactId>
+			<version>8.6.0</version>
+		</dependency>
+
+		<dependency>
 		    <groupId>org.springframework.kafka</groupId>
 		    <artifactId>spring-kafka</artifactId>
 		</dependency>
@@ -83,6 +91,16 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>camunda-nexus</id>
+			<name>Camunda Public Repository</name>
+			<url>https://artifacts.camunda.com/artifactory/public/</url>
+		</repository>
+	</repositories>
+
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -124,6 +142,9 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+		
+
+
 		</plugins>
 	</build>
 
