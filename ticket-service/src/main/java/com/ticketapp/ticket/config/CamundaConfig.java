@@ -2,6 +2,7 @@ package com.ticketapp.ticket.config;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -22,5 +23,16 @@ public class CamundaConfig {
                 .grpcAddress(URI.create("http://"+gatewayAddress))
                 .usePlaintext()
                 .build();
+    }
+
+    @Bean
+    public CommandLineRunner deployBpmn(ZeebeClient zeebeClient){
+        return args -> {
+            zeebeClient.newDeployResourceCommand()
+                    .addResourceFromClasspath("ticket-management.bpmn")
+                    .send().join();
+
+            System.out.println("[CAMUNDA] BPMN deployed: ticket-management.bpmn");
+        };
     }
 }

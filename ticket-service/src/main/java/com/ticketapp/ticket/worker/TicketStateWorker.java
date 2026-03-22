@@ -42,6 +42,20 @@ public class TicketStateWorker {
     public void handleSetNew(JobClient jobClient, final ActivatedJob activatedJob){
         Map<String,Object> variables = activatedJob.getVariablesAsMap();
         String ticketId = (String)variables.get("ticketId");
+        String priority = (String)variables.get("priority");
+        String slaRemainingDuration;
+        String slaWarningDuration;
+
+        if(priority.equals("HIGH")){
+            slaRemainingDuration = "PT4H";
+            slaWarningDuration   = "PT3H";
+        } else if (priority.equals("MEDIUM")){
+            slaRemainingDuration = "PT8H";
+            slaWarningDuration   = "PT6H";
+        } else {
+            slaRemainingDuration = "PT24H";
+            slaWarningDuration   = "PT20H";
+        }
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(()-> new RuntimeException("Ticket bulunamadı"));
@@ -49,7 +63,10 @@ public class TicketStateWorker {
         ticket.setStatus(TicketStatus.NEW);
         ticketRepository.save(ticket);
 
-        jobClient.newCompleteCommand(activatedJob).send().join();
+        jobClient.newCompleteCommand(activatedJob)
+                .variable("slaRemainingDuration",slaRemainingDuration)
+                .variable("slaWarningDuration", slaWarningDuration)
+                .send().join();
     }
 
     public void handleSetInProgress(JobClient jobClient, final ActivatedJob activatedJob){
