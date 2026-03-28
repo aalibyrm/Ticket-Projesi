@@ -62,4 +62,12 @@ public class CamundaMessageService {
                 .send()
                 .join();
     }
+
+    public void sendAgentSendSolution(String ticketId){
+        zeebeClient.newPublishMessageCommand()
+                .messageName("agentSendSolution")
+                .correlationKey(ticketId)
+                .send()
+                .join();
+    }
 }
