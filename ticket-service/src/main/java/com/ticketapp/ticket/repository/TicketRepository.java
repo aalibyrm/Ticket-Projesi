@@ -14,6 +14,7 @@ import com.ticketapp.ticket.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket , String> {
 	List<Ticket> findByUserId(String userId);
 
+	long countByAssigneeId(String assigneeId);
 	long countByAssigneeIdAndStatus(String assigneeId, TicketStatus status); //Çözdüğü ticket sayısı bulmak için
 
 	@Query(value = """
