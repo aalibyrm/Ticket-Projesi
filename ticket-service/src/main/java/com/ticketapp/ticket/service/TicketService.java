@@ -110,17 +110,16 @@ public class TicketService {
         if (!TicketStatus.IN_PROGRESS.equals(ticket.getStatus()))
             throw new RuntimeException("Sadece 'In Progress' durumundaki ticketlar onaya gönderilebilir.");
 
-        //ticket.setStatus(TicketStatus.RESOLVED);
-        Ticket savedTicket = ticketRepository.save(ticket);
+        camundaMessageService.sendAgentSendSolution(id);
 
         TicketEventDto event = new TicketEventDto(
-                savedTicket.getId(),
-                savedTicket.getStatus().toString(),
-                savedTicket.getUserId(),
+                ticket.getId(),
+                ticket.getStatus().toString(),
+                ticket.getUserId(),
                 "Ticket müşteri onayına gönderildi.");
         ticketProducer.sendMessage(event);
 
-        return ticketMapper.toTicketResponseDto(savedTicket);
+        return ticketMapper.toTicketResponseDto(ticket);
     }
 
     public TicketResponseDto customerDecision(String ticketId, boolean approved, String userId) {
