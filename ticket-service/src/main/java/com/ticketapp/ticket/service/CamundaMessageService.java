@@ -2,6 +2,9 @@ package com.ticketapp.ticket.service;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import lombok.RequiredArgsConstructor;
+
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,7 +12,18 @@ import org.springframework.stereotype.Service;
 public class CamundaMessageService {
     private final ZeebeClient zeebeClient;
 
-    public void sendCustomerInfoProvided(String ticketId){
+    public void sendTicketAssigned(String ticketId, String assignedAgent, Long assignedTeam) {
+        zeebeClient.newPublishMessageCommand()
+                .messageName("ticketAssigned")
+                .correlationKey(ticketId)
+                .variables(Map.of(
+                        "assignedAgent", assignedAgent,
+                        "assignedTeam", assignedTeam))
+                .send()
+                .join();
+    }
+
+    public void sendCustomerInfoProvided(String ticketId) {
         zeebeClient.newPublishMessageCommand()
                 .messageName("customerInfoProvided")
                 .correlationKey(ticketId)
@@ -17,7 +31,7 @@ public class CamundaMessageService {
                 .join();
     }
 
-    public void sendCustomerApproved(String ticketId){
+    public void sendCustomerApproved(String ticketId) {
         zeebeClient.newPublishMessageCommand()
                 .messageName("customerApproved")
                 .correlationKey(ticketId)
@@ -25,9 +39,25 @@ public class CamundaMessageService {
                 .join();
     }
 
-    public void sendCustomerRejected(String ticketId){
+    public void sendCustomerRejected(String ticketId) {
         zeebeClient.newPublishMessageCommand()
                 .messageName("customerRejected")
+                .correlationKey(ticketId)
+                .send()
+                .join();
+    }
+
+    public void sendCustomerExplicitClose(String ticketId){
+        zeebeClient.newPublishMessageCommand()
+                .messageName("customerExplicitClose")
+                .correlationKey(ticketId)
+                .send()
+                .join();
+    }
+
+    public void sendCustomerRejectAtResolved(String ticketId) {
+        zeebeClient.newPublishMessageCommand()
+                .messageName("customerRejectAtResolved")
                 .correlationKey(ticketId)
                 .send()
                 .join();

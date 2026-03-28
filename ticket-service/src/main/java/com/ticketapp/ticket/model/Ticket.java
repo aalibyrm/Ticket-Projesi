@@ -48,4 +48,26 @@ public class Ticket {
 
 	@Column(name = "team_id")
 	private Long teamId;
+
+	@Column(name = "sla_started_at")
+	private LocalDateTime slaStartedAt;
+
+	@Column(name="sla_paused_at")
+	private LocalDateTime slaPausedAt;
+
+	@Column(name="sla_total_paused_millis")
+	private Long slaTotalPausedMillis = 0L;
+
+	@Column(name= "sla_breached")
+	private boolean slaBreached = false;
+
+	@Column(name="sla_breached_at")
+	private LocalDateTime slaBreachedAt;
+
+	@Column(name="resolved_at")
+	private LocalDateTime resolvedAt;
+
+	@Column(name="closed_at")
+	private LocalDateTime closedAt;
+
 }

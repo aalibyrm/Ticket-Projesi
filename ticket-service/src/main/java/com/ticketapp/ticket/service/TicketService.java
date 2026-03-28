@@ -21,6 +21,7 @@ public class TicketService {
     private final TicketMapper ticketMapper;
     private final SupportClient supportClient;
     private final TicketProcessService ticketProcessService;
+    private final CamundaMessageService camundaMessageService;
 
     public TicketResponseDto createTicket(TicketRequestDto requestDto, String userId) {
         DepartmentResponseDto departmentResponseDto = supportClient.getDepartmentByTopic(requestDto.getTopicId());
@@ -31,18 +32,19 @@ public class TicketService {
         ticket.setTeamId(teamResponseDto.getId());
         ticket.setUserId(userId);
         //ticket.setStatus(TicketStatus.NEW);
-
         Ticket savedTicket = ticketRepository.save(ticket);
+
+        ticketProcessService.startTicketProcess(savedTicket.getId(),
+                savedTicket.getPriority().name());
 
         TicketEventDto event = new TicketEventDto(
                 savedTicket.getId(),
-                savedTicket.getStatus().toString(),
+                savedTicket.getStatus() != null ? savedTicket.getStatus().name() : "NEW",
                 savedTicket.getUserId(),
                 "Müşteri yeni bir ticket oluşturdu.");
         ticketProducer.sendMessage(event);
 
-        ticketProcessService.startTicketProcess(savedTicket.getId(),
-                savedTicket.getPriority().name());
+
 
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
@@ -80,7 +82,7 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
 
         ticket.setAssigneeId(agentId);
-        ticket.setStatus(TicketStatus.IN_PROGRESS);
+        //ticket.setStatus(TicketStatus.IN_PROGRESS);
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
@@ -90,6 +92,9 @@ public class TicketService {
                 savedTicket.getUserId(),
                 "Ticket bir Agent'a atandı.");
         ticketProducer.sendMessage(event);
+
+
+        camundaMessageService.sendTicketAssigned(ticketId,agentId,ticket.getTeamId());
 
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
@@ -105,7 +110,7 @@ public class TicketService {
         if (!TicketStatus.IN_PROGRESS.equals(ticket.getStatus()))
             throw new RuntimeException("Sadece 'In Progress' durumundaki ticketlar onaya gönderilebilir.");
 
-        ticket.setStatus(TicketStatus.RESOLVED);
+        //ticket.setStatus(TicketStatus.RESOLVED);
         Ticket savedTicket = ticketRepository.save(ticket);
 
         TicketEventDto event = new TicketEventDto(
@@ -134,29 +139,27 @@ public class TicketService {
         Ticket savedTicket;
 
         if (approved) {
-            ticket.setStatus(TicketStatus.CLOSED);
-            savedTicket = ticketRepository.save(ticket);
+            camundaMessageService.sendCustomerExplicitClose(ticketId);
 
             TicketEventDto event = new TicketEventDto(
-                    savedTicket.getId(),
-                    savedTicket.getStatus().toString(),
-                    savedTicket.getUserId(),
+                    ticket.getId(),
+                    ticket.getStatus().toString(),
+                    ticket.getUserId(),
                     "Müşteri çözümü onayladı. Ticket kapatıldı.");
             ticketProducer.sendMessage(event);
         } else {
 
-            ticket.setStatus(TicketStatus.IN_PROGRESS);
-            savedTicket = ticketRepository.save(ticket);
+            camundaMessageService.sendCustomerRejectAtResolved(ticketId);
 
             TicketEventDto event = new TicketEventDto(
-                    savedTicket.getId(),
-                    savedTicket.getStatus().toString(),
-                    savedTicket.getUserId(),
+                    ticket.getId(),
+                    ticket.getStatus().toString(),
+                    ticket.getUserId(),
                     "Müşteri çözümü reddetti. Ticket Agent'a geri gönderildi.");
             ticketProducer.sendMessage(event);
         }
 
-        return ticketMapper.toTicketResponseDto(savedTicket);
+        return ticketMapper.toTicketResponseDto(ticket);
     }
 
     public TicketDetailDto ticketDetails(String ticketId, String userId, String role) {
