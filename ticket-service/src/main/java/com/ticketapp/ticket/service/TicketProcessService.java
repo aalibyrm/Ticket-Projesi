@@ -38,7 +38,6 @@ public class TicketProcessService {
         variables.put("slaPausedAt", null);
         variables.put("slaRemainingDuration", slaRemainingDuration);
         variables.put("slaWarningDuration", slaWarningDuration);
-        variables.put("olaStartTime", null);
         variables.put("candidateGroups", "agents,teamLeaders");
 
         zeebeClient.newCreateInstanceCommand()

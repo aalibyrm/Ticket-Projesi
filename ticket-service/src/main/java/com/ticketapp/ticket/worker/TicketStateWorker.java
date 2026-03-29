@@ -68,13 +68,11 @@ public class TicketStateWorker {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
 
-        String olaStartTime = LocalDateTime.now().toString();
         ticket.setStatus(TicketStatus.NEW);
         ticketRepository.save(ticket);
 
         Map<String, Object> result = new HashMap<>();
         result.put("ticketId", ticketId);
-        result.put("olaStartTime", olaStartTime);
         result.put("slaRemainingDuration", slaRemainingDuration);
         result.put("slaWarningDuration", slaWarningDuration);
         result.put("candidateGroups", "agents,teamLeaders");
