@@ -31,7 +31,7 @@ public class TicketService {
         ticket.setDepartmentId(departmentResponseDto.getId());
         ticket.setTeamId(teamResponseDto.getId());
         ticket.setUserId(userId);
-        //ticket.setStatus(TicketStatus.NEW);
+        // ticket.setStatus(TicketStatus.NEW);
         Ticket savedTicket = ticketRepository.save(ticket);
 
         ticketProcessService.startTicketProcess(savedTicket.getId(),
@@ -43,8 +43,6 @@ public class TicketService {
                 savedTicket.getUserId(),
                 "Müşteri yeni bir ticket oluşturdu.");
         ticketProducer.sendMessage(event);
-
-
 
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
@@ -82,7 +80,7 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
 
         ticket.setAssigneeId(agentId);
-        //ticket.setStatus(TicketStatus.IN_PROGRESS);
+        // ticket.setStatus(TicketStatus.IN_PROGRESS);
 
         Ticket savedTicket = ticketRepository.save(ticket);
 
@@ -93,8 +91,8 @@ public class TicketService {
                 "Ticket bir Agent'a atandı.");
         ticketProducer.sendMessage(event);
 
-
-        camundaMessageService.sendTicketAssigned(ticketId,agentId,ticket.getTeamId());
+        //Zeebe'nin tasarımı gereği her zaman dizi bekler
+        camundaMessageService.sendTicketAssigned(ticketId, agentId, ticket.getTeamId());
 
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
@@ -130,15 +128,13 @@ public class TicketService {
         if (!ticket.getUserId().equals(userId))
             throw new RuntimeException("Bu işlem için yetkiniz yok, ticket size ait değil!");
 
-        if (!TicketStatus.RESOLVED.equals(ticket.getStatus())) {
+        if (!TicketStatus.WAITING_FOR_CUSTOMER.equals(ticket.getStatus())) {
             throw new RuntimeException(
                     "Bu ticket şu an onay bekliyor durumunda değil. Mevcut durum: " + ticket.getStatus());
         }
 
-        Ticket savedTicket;
-
         if (approved) {
-            camundaMessageService.sendCustomerExplicitClose(ticketId);
+            camundaMessageService.sendCustomerApproved(ticketId);
 
             TicketEventDto event = new TicketEventDto(
                     ticket.getId(),
@@ -148,7 +144,7 @@ public class TicketService {
             ticketProducer.sendMessage(event);
         } else {
 
-            camundaMessageService.sendCustomerRejectAtResolved(ticketId);
+            camundaMessageService.sendCustomerRejected(ticketId);
 
             TicketEventDto event = new TicketEventDto(
                     ticket.getId(),

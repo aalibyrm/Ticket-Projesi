@@ -3,6 +3,7 @@ package com.ticketapp.ticket.service;
 import io.camunda.zeebe.client.ZeebeClient;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class CamundaMessageService {
                 .correlationKey(ticketId)
                 .variables(Map.of(
                         "assignedAgent", assignedAgent,
-                        "assignedTeam", assignedTeam))
+                        "assignedTeam", List.of(String.valueOf(assignedTeam))))
                 .send()
                 .join();
     }
