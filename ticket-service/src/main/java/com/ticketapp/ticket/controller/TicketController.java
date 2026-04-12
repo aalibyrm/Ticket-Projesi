@@ -8,6 +8,8 @@ import com.ticketapp.ticket.dto.TicketRequestDto;
 import com.ticketapp.ticket.dto.TicketResponseDto;
 import com.ticketapp.ticket.service.CommentService;
 import com.ticketapp.ticket.service.TicketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Tag(name = "Ticket Yönetimi", description = "Ticket oluşturma, atama, onay ve durum işlemleri")
 @RestController
 @RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final CommentService commentService;
 
-    // Ticket Oluşturma Methodu
+    @Operation(summary = "Ticket oluştur", description = "Yeni bir destek talebi oluşturur. Sadece CUSTOMER rolü erişebilir.")
     @PostMapping("create-ticket")
     @PreAuthorize("hasRole('CUSTOMER')")
     public TicketResponseDto createTicket(@Valid @RequestBody TicketRequestDto requestDto, @AuthenticationPrincipal Jwt jwt) {
@@ -40,6 +43,7 @@ public class TicketController {
         return ticketService.createTicket(requestDto, jwt.getSubject());
     }
 
+    @Operation(summary = "Tüm ticketları listele", description = "CUSTOMER kendi ticketlarını, AGENT/TEAM_LEADER tüm ticketları görür.")
     @GetMapping
     public List<TicketResponseDto> getAllTickets(@AuthenticationPrincipal Jwt jwt) {
         var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
@@ -47,7 +51,7 @@ public class TicketController {
         return ticketService.getAllTickets(jwt.getSubject(), role);
     }
 
-    // Ticket Silme Methodu
+    @Operation(summary = "Ticket sil", description = "Belirtilen ticketı siler. Sadece TEAM_LEADER rolü erişebilir.")
     @DeleteMapping("/{ticketId}")
     @PreAuthorize("hasRole('TEAM_LEADER')")
     public void deleteTicket(@PathVariable String ticketId) {
@@ -55,7 +59,7 @@ public class TicketController {
         ticketService.deleteTicket(ticketId);
     }
 
-    // Ticket Atama Methodu
+    @Operation(summary = "Ticket ata", description = "Ticketı mevcut kullanıcıya (agent) atar. AGENT veya TEAM_LEADER rolü gereklidir.")
     @PatchMapping("/{ticketId}/assign")
     @PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
     public TicketResponseDto assignTicket(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
@@ -63,7 +67,7 @@ public class TicketController {
         return ticketService.assignTicket(ticketId, jwt.getSubject());
     }
 
-    // Ticketı Müşteri Onayına Gönderme Methodu
+    @Operation(summary = "Müşteri onayına gönder", description = "Tamamlanan ticketı müşteri onayı için gönderir.")
     @PatchMapping("/{ticketId}/send-to-approval")
     @PreAuthorize("hasAnyRole('AGENT','TEAM_LEADER')")
     public TicketResponseDto sendToApproval(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
@@ -71,7 +75,7 @@ public class TicketController {
         return ticketService.sendToApproval(ticketId, jwt.getSubject());
     }
 
-    // Müşterinin Ticketı Onaylama Methodu
+    @Operation(summary = "Müşteri kararı", description = "Müşteri ticketı onaylar (approved=true) veya reddeder (approved=false).")
     @PatchMapping("/{ticketId}/customer-decision")
     @PreAuthorize("hasRole('CUSTOMER')")
     public TicketResponseDto customerDecision(
@@ -83,6 +87,7 @@ public class TicketController {
         return ticketService.customerDecision(ticketId, approved, jwt.getSubject());
     }
 
+    @Operation(summary = "Ticket detayı", description = "Ticket bilgileri ve tüm yorumlarını döner.")
     @GetMapping("/{ticketId}/details")
     public TicketDetailDto ticketDetails(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
         var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
