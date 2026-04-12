@@ -1,0 +1,62 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  # Promtail'in hangi satira kadar okudugunu buraya kaydeder
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: docker-containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+        refresh_interval: 5s
+        filters:
+          # Sadece ticket-network'e bagli containerlari topla
+          - name: network
+            values: ["ticket-network"]
+
+    relabel_configs:
+      # Container adini "container" labeline al
+      - source_labels: [__meta_docker_container_name]
+        regex: /(.*)
+        target_label: container
+
+      # Docker image adini "image" labeline al
+      - source_labels: [__meta_docker_container_image]
+        target_label: image
+
+      # ticket- prefix'li container'lara "app" labeli ekle (kolay filtreleme)
+      - source_labels: [__meta_docker_container_name]
+        regex: /ticket-(.*)
+        target_label: app
+        replacement: $1
+
+    pipeline_stages:
+      # JSON formatindaki loglardan alan cikart
+      - json:
+          expressions:
+            level: level
+            service: service
+            traceId: traceId
+            spanId: spanId
+
+      # "level" ve "service" alanlarini Loki label'i yap
+      # (Dikkat: yuksek kardinaliteli alanlar — traceId, spanId —
+      #  label yapilmamali; sadece log icinde kalsin)
+      - labels:
+          level:
+          service:
+
+      # Zaman damgasini JSON'daki @timestamp'dan al
+      - timestamp:
+          source: "@timestamp"
+          format: RFC3339Milli
+
+      # JSON olmayan loglar (discovery-server baslarken metin log yazabilir)
+      # icin hata vermemek adina output stage ekle
+      - output:
+          source: message

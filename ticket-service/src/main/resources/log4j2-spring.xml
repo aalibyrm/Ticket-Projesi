@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  log4j2-spring.xml — Spring Boot'un profil destekli Log4j2 dosyasi.
+  "-spring" eki sayesinde Spring, <SpringProfile> bloklarini yorumlar.
+
+  DEV  profili : PatternLayout  — terminal'de okunabilir metin
+  PROD / DOCKER: JsonTemplateLayout — Loki icin makine okunabilir JSON
+-->
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Property>
+        <Property name="APP_NAME">ticket-service</Property>
+    </Properties>
+
+    <Appenders>
+
+        <!-- ═══════════════════════════════════════════════
+             DEV profili: renkli, okunabilir metin format
+             ═══════════════════════════════════════════════ -->
+        <SpringProfile name="dev">
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+            </Console>
+            <RollingFile name="File"
+                         fileName="logs/${APP_NAME}.log"
+                         filePattern="logs/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+                <PatternLayout pattern="${LOG_PATTERN}"/>
+                <Policies>
+                    <SizeBasedTriggeringPolicy size="10MB"/>
+                    <TimeBasedTriggeringPolicy interval="1"/>
+                </Policies>
+                <DefaultRolloverStrategy max="30"/>
+            </RollingFile>
+        </SpringProfile>
+
+        <!-- ═══════════════════════════════════════════════════════════════
+             PROD / DOCKER profili: JSON format — Promtail/Loki entegrasyonu
+             Her alan ayri JSON key oldugundan LogQL filtreleme mumkun olur.
+             traceId ve spanId MDC'den otomatik alinir (Micrometer Tracing).
+             ═══════════════════════════════════════════════════════════════ -->
+        <SpringProfile name="prod,docker">
+            <Console name="Console" target="SYSTEM_OUT">
+                <JsonTemplateLayout
+                        eventTemplateUri="classpath:log4j2-json-template.json"
+                        nullEventTemplateFieldHandling="EXCLUDE">
+                    <!-- service alani: Loki'de hangi servisten geldigini gosterir -->
+                    <EventTemplateAdditionalField key="service" value="${APP_NAME}"/>
+                </JsonTemplateLayout>
+            </Console>
+            <RollingFile name="File"
+                         fileName="logs/${APP_NAME}.log"
+                         filePattern="logs/${APP_NAME}-%d{yyyy-MM-dd}-%i.log.gz">
+                <JsonTemplateLayout
+                        eventTemplateUri="classpath:log4j2-json-template.json"
+                        nullEventTemplateFieldHandling="EXCLUDE">
+                    <EventTemplateAdditionalField key="service" value="${APP_NAME}"/>
+                </JsonTemplateLayout>
+                <Policies>
+                    <SizeBasedTriggeringPolicy size="10MB"/>
+                    <TimeBasedTriggeringPolicy interval="1"/>
+                </Policies>
+                <DefaultRolloverStrategy max="30"/>
+            </RollingFile>
+        </SpringProfile>
+
+    </Appenders>
+
+    <Loggers>
+        <Logger name="com.ticketapp" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Logger>
+        <Logger name="org.springframework" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.apache.kafka" level="WARN" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
