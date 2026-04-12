@@ -1,11 +1,12 @@
 package com.ticketapp.ticket.service;
 
+import com.ticketapp.ticket.dto.TicketEventDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import com.ticketapp.ticket.dto.TicketEventDto;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TicketProducer {
@@ -15,7 +16,7 @@ public class TicketProducer {
 	private static final String TOPIC = "ticket-status-topic";
 
 	public void sendMessage(TicketEventDto event) {
-		System.out.println("Kafka'ya mesaj gönderiliyor: " + event);
+		log.info("Kafka'ya mesaj gonderiliyor: topic={}, event={}", TOPIC, event);
 		kafkaTemplate.send(TOPIC, event);
 	}
 }

@@ -1,6 +1,7 @@
 package com.ticketapp.ticket.config;
 
 import io.camunda.zeebe.client.ZeebeClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.net.URI;
 
+@Slf4j
 @Configuration
 public class CamundaConfig {
 
@@ -32,7 +34,7 @@ public class CamundaConfig {
                     .addResourceFromClasspath("ticket-management.bpmn")
                     .send().join();
 
-            System.out.println("[CAMUNDA] BPMN deployed: ticket-management.bpmn");
+            log.info("[CAMUNDA] BPMN deployed: ticket-management.bpmn");
         };
     }
 }

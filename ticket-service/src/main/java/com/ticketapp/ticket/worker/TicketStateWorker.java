@@ -1,5 +1,6 @@
 package com.ticketapp.ticket.worker;
 
+import com.ticketapp.ticket.exception.TicketNotFoundException;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;
@@ -10,6 +11,7 @@ import io.camunda.zeebe.client.api.worker.JobWorker;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TicketStateWorker {
@@ -30,16 +33,11 @@ public class TicketStateWorker {
     @PostConstruct
     public void registerWorkers() {
         openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setNew").handler(this::handleSetNew).open());
-        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setInProgress").handler(this::handleSetInProgress)
-                .open());
-        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setPendingCustomerInput")
-                .handler(this::handleSetPending).open());
-        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setWaitingForCustomer")
-                .handler(this::handleSetWaiting).open());
-        openWorkers.add(
-                zeebeClient.newWorker().jobType("ticket.state.setResolved").handler(this::handleSetResolved).open());
-        openWorkers
-                .add(zeebeClient.newWorker().jobType("ticket.state.setClosed").handler(this::handleSetClosed).open());
+        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setInProgress").handler(this::handleSetInProgress).open());
+        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setPendingCustomerInput").handler(this::handleSetPending).open());
+        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setWaitingForCustomer").handler(this::handleSetWaiting).open());
+        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setResolved").handler(this::handleSetResolved).open());
+        openWorkers.add(zeebeClient.newWorker().jobType("ticket.state.setClosed").handler(this::handleSetClosed).open());
     }
 
     @PreDestroy
@@ -66,10 +64,13 @@ public class TicketStateWorker {
         }
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         ticket.setStatus(TicketStatus.NEW);
         ticketRepository.save(ticket);
+
+        log.info("[STATE] ticketId={} -> NEW | priority={}, slaRemaining={}, slaWarning={}",
+                ticketId, priority, slaRemainingDuration, slaWarningDuration);
 
         Map<String, Object> result = new HashMap<>();
         result.put("ticketId", ticketId);
@@ -91,7 +92,7 @@ public class TicketStateWorker {
         String slaWarningDuration = (String) variables.get("slaWarningDuration");
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         if (slaRemainingDuration == null || slaWarningDuration == null) {
             String priority = ticket.getPriority() != null ? ticket.getPriority().name() : "LOW";
@@ -127,7 +128,6 @@ public class TicketStateWorker {
                 ? ticket.getSlaTotalPausedMillis()
                 : 0L;
         ticket.setSlaTotalPausedMillis(currentPaused + pausedMs);
-
         ticket.setSlaPausedAt(null);
 
         if (ticket.getSlaStartedAt() == null) {
@@ -136,6 +136,8 @@ public class TicketStateWorker {
 
         ticket.setStatus(TicketStatus.IN_PROGRESS);
         ticketRepository.save(ticket);
+
+        log.info("[STATE] ticketId={} -> IN_PROGRESS | slaPaused={}, slaRemaining={}", ticketId, slaPaused, slaRemainingDuration);
 
         Map<String, Object> result = new HashMap<>();
         result.put("slaRemainingDuration", slaRemainingDuration);
@@ -160,13 +162,14 @@ public class TicketStateWorker {
         String ticketId = (String) variables.get("ticketId");
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
         LocalDateTime now = LocalDateTime.now();
 
         ticket.setResolvedAt(now);
-
         ticket.setStatus(TicketStatus.RESOLVED);
         ticketRepository.save(ticket);
+
+        log.info("[STATE] ticketId={} -> RESOLVED", ticketId);
 
         jobClient.newCompleteCommand(activatedJob).send().join();
     }
@@ -176,12 +179,14 @@ public class TicketStateWorker {
         String ticketId = (String) variables.get("ticketId");
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
         LocalDateTime now = LocalDateTime.now();
 
         ticket.setClosedAt(now);
         ticket.setStatus(TicketStatus.CLOSED);
         ticketRepository.save(ticket);
+
+        log.info("[STATE] ticketId={} -> CLOSED", ticketId);
 
         jobClient.newCompleteCommand(activatedJob).send().join();
     }
@@ -191,12 +196,14 @@ public class TicketStateWorker {
         String ticketId = (String) variables.get("ticketId");
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
         LocalDateTime now = LocalDateTime.now();
         ticket.setSlaPausedAt(now);
 
         ticket.setStatus(status);
         ticketRepository.save(ticket);
+
+        log.info("[STATE] ticketId={} -> {} (SLA durduruldu: {})", ticketId, status, now);
 
         jobClient.newCompleteCommand(activatedJob)
                 .variable("slaPausedAt", now.toString())

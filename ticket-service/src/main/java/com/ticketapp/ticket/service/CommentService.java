@@ -2,6 +2,9 @@ package com.ticketapp.ticket.service;
 
 import com.ticketapp.ticket.dto.CommentRequestDto;
 import com.ticketapp.ticket.dto.CommentResponseDto;
+import com.ticketapp.ticket.exception.CommentNotFoundException;
+import com.ticketapp.ticket.exception.TicketNotFoundException;
+import com.ticketapp.ticket.exception.UnauthorizedAccessException;
 import com.ticketapp.ticket.interfaces.CommentMapper;
 import com.ticketapp.ticket.model.Comment;
 import com.ticketapp.ticket.model.CommentType;
@@ -9,11 +12,13 @@ import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.repository.CommentRepository;
 import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -23,15 +28,15 @@ public class CommentService {
     private final CommentMapper commentMapper;
 
     public CommentResponseDto createComment(String ticketId, CommentRequestDto request, String userId) {
-        //Müşteriler için kendisinin olmayan ticketa yorum atma kontrolu eklencek
-
+        // Musteri icin kendisinin olmayan ticketa yorum atma kontrolu eklenecek
         if (ticketRepository.findById(ticketId).isEmpty()) {
-            throw new RuntimeException("Ticket bulunamadı");
+            throw new TicketNotFoundException(ticketId);
         }
 
         Comment comment = commentMapper.commentDto(request);
         Comment savedComment = commentRepository.save(comment);
 
+        log.debug("Yorum olusturuldu: ticketId={}, userId={}", ticketId, userId);
         return commentMapper.commentResponseDto(savedComment);
     }
 
@@ -40,42 +45,39 @@ public class CommentService {
         List<Comment> byTicketId = commentRepository.findByTicket_Id(ticketId);
 
         if (role.contains("CUSTOMER")) {
-            // Müşteri sadece external yorumları görür
+            // Musteri sadece external yorumlari gorur
             List<Comment> externalComments = byTicketId.stream()
                     .filter(c -> c.getType() == CommentType.EXTERNAL)
                     .toList();
             return commentMapper.toDoList(externalComments);
         } else {
-            // Destek ekibi tüm yorumları görür
+            // Destek ekibi tum yorumlari gorur
             return commentMapper.toDoList(byTicketId);
         }
-
     }
 
     public CommentResponseDto editComment(String ticketId, String commentId, String userId, CommentRequestDto request,
             String role, boolean changeType) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunmadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         List<Comment> commentList = new ArrayList<>(ticket.getComments());
 
-        // Ticketta istenilen commenti çekmeye çalıştım
         Comment editedComment = commentList.stream()
                 .filter(c -> c.getId().equals(commentId))
-                .findFirst().orElseThrow(() -> new RuntimeException("Comment bulunmadı"));
+                .findFirst()
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
 
-        // Comment sahibi mi düzenlemeye çalışıyor kontrolü
+        // Comment sahibi mi duzenlemeye calisiyor kontrolu
         if (!editedComment.getUserId().equals(userId))
-            throw new RuntimeException("Comment düzenlemeye yetkiniz yok!");
+            throw new UnauthorizedAccessException("Comment duzenlemeye yetkiniz yok!");
 
         editedComment.setComment(request.getComment());
 
-        // Eğer istek atan kişi destek ekibidindense ve comment type değiştirmek
-        // istiyorsa
+        // Eger istek atan kisi destek ekibindense ve comment type degistirmek istiyorsa
         if (!role.contains("CUSTOMER") && changeType) {
-
-            // Internal External değişimi
+            // Internal External degisimi
             if (editedComment.getType().equals(CommentType.INTERNAL)) {
                 editedComment.setType(CommentType.EXTERNAL);
             } else {
@@ -84,8 +86,8 @@ public class CommentService {
         }
 
         Comment savedComment = commentRepository.save(editedComment);
+        log.debug("Yorum duzenlendi: commentId={}, userId={}", commentId, userId);
 
         return commentMapper.commentResponseDto(savedComment);
     }
-
 }

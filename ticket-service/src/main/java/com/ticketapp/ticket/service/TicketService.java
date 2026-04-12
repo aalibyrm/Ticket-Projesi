@@ -1,16 +1,21 @@
 package com.ticketapp.ticket.service;
 
 import com.ticketapp.ticket.dto.*;
+import com.ticketapp.ticket.exception.InvalidTicketStateException;
+import com.ticketapp.ticket.exception.TicketNotFoundException;
+import com.ticketapp.ticket.exception.UnauthorizedAccessException;
 import com.ticketapp.ticket.interfaces.SupportClient;
 import com.ticketapp.ticket.interfaces.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -62,7 +67,7 @@ public class TicketService {
     public void deleteTicket(String id) {
 
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(id));
 
         TicketEventDto event = new TicketEventDto(
                 ticket.getId(),
@@ -77,7 +82,7 @@ public class TicketService {
     public TicketResponseDto assignTicket(String ticketId, String agentId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         ticket.setAssigneeId(agentId);
         // ticket.setStatus(TicketStatus.IN_PROGRESS);
@@ -99,14 +104,14 @@ public class TicketService {
 
     public TicketResponseDto sendToApproval(String id, String agentId) {
         Ticket ticket = ticketRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(id));
 
         if (ticket.getAssigneeId() == null || !ticket.getAssigneeId().equals(agentId))
-            throw new RuntimeException(
-                    "Bu ticket size atanmamış! Sadece size atanan ticketları onaya gönderebilirsiniz.");
+            throw new UnauthorizedAccessException(
+                    "Bu ticket size atanmamis! Sadece size atanan ticketlari onaya gonderebilirsiniz.");
 
         if (!TicketStatus.IN_PROGRESS.equals(ticket.getStatus()))
-            throw new RuntimeException("Sadece 'In Progress' durumundaki ticketlar onaya gönderilebilir.");
+            throw new InvalidTicketStateException("Sadece 'In Progress' durumundaki ticketlar onaya gonderilebilir.");
 
         camundaMessageService.sendAgentSendSolution(id);
 
@@ -123,14 +128,14 @@ public class TicketService {
     public TicketResponseDto customerDecision(String ticketId, boolean approved, String userId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         if (!ticket.getUserId().equals(userId))
-            throw new RuntimeException("Bu işlem için yetkiniz yok, ticket size ait değil!");
+            throw new UnauthorizedAccessException("Bu islem icin yetkiniz yok, ticket size ait degil!");
 
         if (!TicketStatus.WAITING_FOR_CUSTOMER.equals(ticket.getStatus())) {
-            throw new RuntimeException(
-                    "Bu ticket şu an onay bekliyor durumunda değil. Mevcut durum: " + ticket.getStatus());
+            throw new InvalidTicketStateException(
+                    "Bu ticket su an onay bekliyor durumunda degil. Mevcut durum: " + ticket.getStatus());
         }
 
         if (approved) {
@@ -159,10 +164,10 @@ public class TicketService {
 
     public TicketDetailDto ticketDetails(String ticketId, String userId, String role) {
         Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket bulunamadı"));
+                .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
         if (role.contains("CUSTOMER") && !ticket.getUserId().equals(userId)) {
-            throw new RuntimeException("Bu ticket detaylarını görmeye yetkiniz yok!");
+            throw new UnauthorizedAccessException("Bu ticket detaylarini gormeye yetkiniz yok!");
         }
 
         List<CommentResponseDto> commentList = commentService.getCommentsByTicketId(ticketId, role);

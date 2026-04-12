@@ -1,38 +1,36 @@
 package com.ticketapp.notification.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Service;
-
 import com.ticketapp.notification.client.UserClient;
 import com.ticketapp.notification.dto.TicketEventDto;
 import com.ticketapp.notification.dto.UserDto;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class NotificationConsumer {
 
-	@Autowired
-	UserClient userClient;
-	
+	private final UserClient userClient;
+
 	@KafkaListener(topics = "ticket-status-topic", groupId = "notification-group")
 	public void consumeMessage(TicketEventDto event) {
-		
+
 		try {
-			
 			UserDto user = userClient.getUserById(event.getUserId());
-			
-			System.out.println("--------------------------------------------------");
-            System.out.println("🔔 BİLDİRİM: Sayın " + user.getFirstName() + " " + user.getLastName());
-            System.out.println("Mesaj: " + event.getMessage());
-            System.out.println("Biletinizin Güncel Durumu: " + event.getStatus());
-            System.out.println("--------------------------------------------------");
-            
+
+			log.info("BILDIRIM: Sayin {} {}, Mesaj: {}, Biletinizin Guncel Durumu: {}",
+					user.getFirstName(), user.getLastName(),
+					event.getMessage(), event.getStatus());
+
 		} catch (Exception e) {
-			System.err.println("❌ Feign Hatası: " + e.getMessage());
-			System.out.println("Kullanıcı bilgileri çekilemedi, ham veri basılıyor: " + event.getUserId());
+			log.error("Feign Hatasi - kullanici bilgileri cekilemedi. userId={}, hata={}",
+					event.getUserId(), e.getMessage(), e);
+			log.warn("Ham veri isleniyor: userId={}, status={}", event.getUserId(), event.getStatus());
 		}
-		
-        
-     // Mail atma eklencek
+
+		// Mail atma eklenecek
 	}
 }
