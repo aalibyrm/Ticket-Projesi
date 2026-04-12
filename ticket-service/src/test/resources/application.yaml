@@ -1,0 +1,15 @@
+# Test ortamı yapılandırması
+# @WebMvcTest çalışırken bu dosya yüklenir
+
+spring:
+  main:
+    # @WebMvcTest'te Feign client bean'leri çift kaydolabiliyor (Spring Boot 4.x davranışı)
+    allow-bean-definition-overriding: true
+
+eureka:
+  client:
+    enabled: false   # Test sırasında Eureka'ya bağlanmayı engelle
+
+management:
+  tracing:
+    enabled: false   # Test sırasında OpenTelemetry kapalı

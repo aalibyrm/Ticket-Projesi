@@ -1,0 +1,222 @@
+2026-04-12 22:54:40.140 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum olusturuldu: ticketId=ticket-id, userId=user-123
+2026-04-12 22:54:40.166 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=user-123
+2026-04-12 22:54:40.171 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=agent-123
+2026-04-12 22:54:40.182 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=customer-123
+2026-04-12 22:55:05.803 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Starting TicketControllerTest using Java 17.0.12 with PID 12120 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 22:55:05.811 [main] DEBUG com.ticketapp.ticket.controller.TicketControllerTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 22:55:05.813 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 22:55:06.279 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 22:55:50.683 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Starting TicketControllerTest using Java 17.0.12 with PID 24616 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 22:55:50.687 [main] DEBUG com.ticketapp.ticket.controller.TicketControllerTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 22:55:50.688 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 22:55:51.017 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 22:56:26.951 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Starting TicketControllerTest using Java 17.0.12 with PID 22712 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 22:56:26.955 [main] DEBUG com.ticketapp.ticket.controller.TicketControllerTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 22:56:26.956 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 22:56:27.363 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 22:56:30.356 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Started TicketControllerTest in 4.025 seconds (process running for 6.179)
+2026-04-12 22:59:07.758 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Starting TicketControllerTest using Java 17.0.12 with PID 14004 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 22:59:07.761 [main] DEBUG com.ticketapp.ticket.controller.TicketControllerTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 22:59:07.762 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 22:59:08.080 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 22:59:10.483 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Started TicketControllerTest in 3.187 seconds (process running for 5.131)
+2026-04-12 23:01:23.024 [main] INFO  org.testcontainers.images.PullPolicy - Image pull policy will be performed by: DefaultPullPolicy()
+2026-04-12 23:01:23.030 [main] INFO  org.testcontainers.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-04-12 23:01:23.163 [main] INFO  org.testcontainers.DockerClientFactory - Testcontainers version: 2.0.3
+2026-04-12 23:01:24.201 [main] INFO  org.testcontainers.dockerclient.DockerClientProviderStrategy - Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+2026-04-12 23:01:24.214 [main] INFO  org.testcontainers.DockerClientFactory - Docker host IP address is localhost
+2026-04-12 23:01:24.242 [main] INFO  org.testcontainers.DockerClientFactory - Connected to docker: 
+  Server Version: 29.2.1
+  API Version: 1.53
+  Operating System: Docker Desktop
+  Total Memory: 6859 MB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+2026-04-12 23:01:24.400 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling docker image: testcontainers/ryuk:0.13.0. Please be patient; this may take some time but only needs to be done once.
+2026-04-12 23:01:26.391 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Starting to pull image
+2026-04-12 23:01:26.415 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling image layers:  0 pending,  0 downloaded,  0 extracted, (0 bytes/0 bytes)
+2026-04-12 23:01:27.335 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling image layers:  1 pending,  1 downloaded,  0 extracted, (0 bytes/? MB)
+2026-04-12 23:01:27.337 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling image layers:  1 pending,  1 downloaded,  1 extracted, (0 bytes/? MB)
+2026-04-12 23:01:28.223 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling image layers:  0 pending,  2 downloaded,  1 extracted, (6 MB/6 MB)
+2026-04-12 23:01:28.225 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pulling image layers:  0 pending,  2 downloaded,  2 extracted, (6 MB/6 MB)
+2026-04-12 23:01:28.232 [docker-java-stream--1376446111] INFO  tc.testcontainers/ryuk:0.13.0 - Pull complete. 2 layers, pulled in 1s (downloaded 6 MB at 6 MB/s)
+2026-04-12 23:01:28.232 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Image testcontainers/ryuk:0.13.0 pull took PT3.8324275S
+2026-04-12 23:01:28.334 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Creating container for image: testcontainers/ryuk:0.13.0
+2026-04-12 23:01:28.535 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 is starting: 0045786c71c9afee857566cb0cd349253173236f1a5054a835a540a42f957208
+2026-04-12 23:01:29.047 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 started in PT0.7129642S
+2026-04-12 23:01:29.056 [main] INFO  org.testcontainers.utility.RyukResourceReaper - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-04-12 23:01:29.056 [main] INFO  org.testcontainers.DockerClientFactory - Checking the system...
+2026-04-12 23:01:29.058 [main] INFO  org.testcontainers.DockerClientFactory - ?? Docker server version should be at least 1.6.0
+2026-04-12 23:01:29.248 [main] INFO  tc.postgres:15-alpine - Creating container for image: postgres:15-alpine
+2026-04-12 23:01:29.387 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine is starting: 531a1d925e6e3225670527aad275c6acb25083f6ef9199a2187c3e00e3cd3dbe
+2026-04-12 23:01:31.788 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine started in PT2.5394258S
+2026-04-12 23:01:31.789 [main] INFO  tc.postgres:15-alpine - Container is started (JDBC URL: jdbc:postgresql://localhost:59550/test?loggerLevel=OFF)
+2026-04-12 23:01:32.586 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Starting TicketRepositoryIntegrationTest using Java 17.0.12 with PID 10744 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 23:01:32.591 [main] DEBUG com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 23:01:32.592 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 23:01:33.000 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 23:01:33.976 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-12 23:01:34.319 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6719f206
+2026-04-12 23:01:34.323 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-12 23:01:34.384 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-12 23:01:34.528 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-04-12 23:01:35.704 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:59550/test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.15
+	Default catalog/schema: test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-12 23:01:37.657 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-12 23:01:38.277 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Started TicketRepositoryIntegrationTest in 6.261 seconds (process running for 17.566)
+2026-04-12 23:01:39.429 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.429 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.511 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.512 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.540 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.540 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.575 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.576 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.601 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.602 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.627 [main] WARN  org.hibernate.orm.jdbc.error - HHH000247: ErrorCode: 0, SQLState: 42P01
+2026-04-12 23:01:39.627 [main] WARN  org.hibernate.orm.jdbc.error - ERROR: relation "tickets" does not exist
+  Position: 294
+2026-04-12 23:01:39.650 [main] WARN  org.junit.jupiter.engine.descriptor.AbstractExtensionContext - Type implements CloseableResource but not AutoCloseable: org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter
+2026-04-12 23:01:40.292 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+2026-04-12 23:01:40.297 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+2026-04-12 23:02:37.488 [main] INFO  org.testcontainers.images.PullPolicy - Image pull policy will be performed by: DefaultPullPolicy()
+2026-04-12 23:02:37.492 [main] INFO  org.testcontainers.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-04-12 23:02:37.576 [main] INFO  org.testcontainers.DockerClientFactory - Testcontainers version: 2.0.3
+2026-04-12 23:02:37.915 [main] INFO  org.testcontainers.dockerclient.DockerClientProviderStrategy - Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2026-04-12 23:02:38.740 [main] INFO  org.testcontainers.dockerclient.DockerClientProviderStrategy - Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+2026-04-12 23:02:38.743 [main] INFO  org.testcontainers.DockerClientFactory - Docker host IP address is localhost
+2026-04-12 23:02:38.771 [main] INFO  org.testcontainers.DockerClientFactory - Connected to docker: 
+  Server Version: 29.2.1
+  API Version: 1.53
+  Operating System: Docker Desktop
+  Total Memory: 6859 MB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+2026-04-12 23:02:38.928 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Creating container for image: testcontainers/ryuk:0.13.0
+2026-04-12 23:02:39.387 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 is starting: 62c9a1d8a780c0c6323a50b1ba73aa7d5ff7665dc471b23dab148ef46e815cf0
+2026-04-12 23:02:40.137 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 started in PT1.2086262S
+2026-04-12 23:02:40.146 [main] INFO  org.testcontainers.utility.RyukResourceReaper - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-04-12 23:02:40.146 [main] INFO  org.testcontainers.DockerClientFactory - Checking the system...
+2026-04-12 23:02:40.147 [main] INFO  org.testcontainers.DockerClientFactory - ?? Docker server version should be at least 1.6.0
+2026-04-12 23:02:40.355 [main] INFO  tc.postgres:15-alpine - Creating container for image: postgres:15-alpine
+2026-04-12 23:02:40.484 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine is starting: ed46adcd946544ea9cff8e5302e5310ef8f6f0434e9d9702cdbb671ee8f0dff2
+2026-04-12 23:02:42.667 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine started in PT2.3123478S
+2026-04-12 23:02:42.668 [main] INFO  tc.postgres:15-alpine - Container is started (JDBC URL: jdbc:postgresql://localhost:59625/test?loggerLevel=OFF)
+2026-04-12 23:02:43.637 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Starting TicketRepositoryIntegrationTest using Java 17.0.12 with PID 4888 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 23:02:43.642 [main] DEBUG com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 23:02:43.643 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 23:02:44.096 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 23:02:45.114 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-12 23:02:45.248 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-04-12 23:02:46.174 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-12 23:02:46.423 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@f31b991
+2026-04-12 23:02:46.425 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-12 23:02:46.531 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:59625/test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.15
+	Default catalog/schema: test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-12 23:02:47.825 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-12 23:02:48.506 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Started TicketRepositoryIntegrationTest in 5.653 seconds (process running for 13.832)
+2026-04-12 23:02:50.277 [main] WARN  org.junit.jupiter.engine.descriptor.AbstractExtensionContext - Type implements CloseableResource but not AutoCloseable: org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter
+2026-04-12 23:02:50.960 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@f31b991 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.962 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@586b8d42 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.963 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@3502fac1 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.964 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@5e4fa5f3 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.965 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@24cec571 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.966 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@20cb4d37 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.967 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@23d7f1d (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.967 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@21fe3294 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.968 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@73c99e97 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:02:50.969 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@991d72c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:03:52.353 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Starting TicketControllerTest using Java 17.0.12 with PID 16636 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 23:03:52.357 [main] DEBUG com.ticketapp.ticket.controller.TicketControllerTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 23:03:52.358 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 23:03:52.773 [background-preinit] INFO  org.hibernate.validator.internal.util.Version - HV000001: Hibernate Validator 9.0.1.Final
+2026-04-12 23:03:56.262 [main] INFO  com.ticketapp.ticket.controller.TicketControllerTest - Started TicketControllerTest in 4.589 seconds (process running for 7.346)
+2026-04-12 23:03:57.386 [main] INFO  org.testcontainers.images.PullPolicy - Image pull policy will be performed by: DefaultPullPolicy()
+2026-04-12 23:03:57.391 [main] INFO  org.testcontainers.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2026-04-12 23:03:57.418 [main] INFO  org.testcontainers.DockerClientFactory - Testcontainers version: 2.0.3
+2026-04-12 23:03:57.781 [main] INFO  org.testcontainers.dockerclient.DockerClientProviderStrategy - Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2026-04-12 23:03:58.392 [main] INFO  org.testcontainers.dockerclient.DockerClientProviderStrategy - Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+2026-04-12 23:03:58.393 [main] INFO  org.testcontainers.DockerClientFactory - Docker host IP address is localhost
+2026-04-12 23:03:58.417 [main] INFO  org.testcontainers.DockerClientFactory - Connected to docker: 
+  Server Version: 29.2.1
+  API Version: 1.53
+  Operating System: Docker Desktop
+  Total Memory: 6859 MB
+  Labels: 
+    com.docker.desktop.address=npipe://\\.\pipe\docker_cli
+2026-04-12 23:03:58.565 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Creating container for image: testcontainers/ryuk:0.13.0
+2026-04-12 23:03:59.038 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 is starting: 8d8399f793bd3a682c3a8406e392fe002634dcdd671cc56dc3fd56cc6697e233
+2026-04-12 23:03:59.571 [main] INFO  tc.testcontainers/ryuk:0.13.0 - Container testcontainers/ryuk:0.13.0 started in PT1.0054673S
+2026-04-12 23:03:59.580 [main] INFO  org.testcontainers.utility.RyukResourceReaper - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2026-04-12 23:03:59.580 [main] INFO  org.testcontainers.DockerClientFactory - Checking the system...
+2026-04-12 23:03:59.581 [main] INFO  org.testcontainers.DockerClientFactory - ?? Docker server version should be at least 1.6.0
+2026-04-12 23:03:59.673 [main] INFO  tc.postgres:15-alpine - Creating container for image: postgres:15-alpine
+2026-04-12 23:03:59.815 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine is starting: 6610581f2040e11c31a120c0b685f5548bc59267e8f786da8e5d230bab3e8d77
+2026-04-12 23:04:02.017 [main] INFO  tc.postgres:15-alpine - Container postgres:15-alpine started in PT2.3441664S
+2026-04-12 23:04:02.021 [main] INFO  tc.postgres:15-alpine - Container is started (JDBC URL: jdbc:postgresql://localhost:59679/test?loggerLevel=OFF)
+2026-04-12 23:04:02.275 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Starting TicketRepositoryIntegrationTest using Java 17.0.12 with PID 16636 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 23:04:02.277 [main] DEBUG com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 23:04:02.277 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 23:04:03.492 [main] INFO  org.hibernate.orm.jpa - HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-04-12 23:04:03.639 [main] INFO  org.hibernate.orm.core - HHH000001: Hibernate ORM core version 7.2.4.Final
+2026-04-12 23:04:04.141 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2026-04-12 23:04:04.378 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@4d484eda
+2026-04-12 23:04:04.379 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2026-04-12 23:04:04.463 [main] INFO  org.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:59679/test?loggerLevel=OFF]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 15.15
+	Default catalog/schema: test/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-04-12 23:04:05.532 [main] INFO  org.hibernate.orm.core - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-04-12 23:04:06.147 [main] INFO  com.ticketapp.ticket.repository.TicketRepositoryIntegrationTest - Started TicketRepositoryIntegrationTest in 4.113 seconds (process running for 17.231)
+2026-04-12 23:04:07.021 [main] WARN  org.junit.jupiter.engine.descriptor.AbstractExtensionContext - Type implements CloseableResource but not AutoCloseable: org.testcontainers.junit.jupiter.TestcontainersExtension$StoreAdapter
+2026-04-12 23:04:07.896 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum olusturuldu: ticketId=ticket-id, userId=user-123
+2026-04-12 23:04:07.909 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=user-123
+2026-04-12 23:04:07.912 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=agent-123
+2026-04-12 23:04:07.923 [main] DEBUG com.ticketapp.ticket.service.CommentService - Yorum duzenlendi: commentId=comment-id, userId=customer-123
+2026-04-12 23:04:08.543 [main] INFO  com.ticketapp.ticket.TicketServiceApplicationTests - Starting TicketServiceApplicationTests using Java 17.0.12 with PID 16636 (started by alper in C:\spring-workspace\Proje\ticket-service)
+2026-04-12 23:04:08.544 [main] DEBUG com.ticketapp.ticket.TicketServiceApplicationTests - Running with Spring Boot v4.0.3, Spring v7.0.5
+2026-04-12 23:04:08.544 [main] INFO  com.ticketapp.ticket.TicketServiceApplicationTests - No active profile set, falling back to 1 default profile: "default"
+2026-04-12 23:04:08.726 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4d484eda (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.728 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7b1da6ee (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.729 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@2f713674 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.729 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@7d288dde (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.730 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@13066bfd (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.730 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@62c16591 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.731 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@6633357c (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.731 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@260a498f (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.732 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@4808cd7e (This connection has been closed.). Possibly consider using a shorter maxLifetime value.
+2026-04-12 23:04:08.732 [SpringApplicationShutdownHook] WARN  com.zaxxer.hikari.pool.PoolBase - HikariPool-1 - Failed to validate connection org.postgresql.jdbc.PgConnection@109e3b4 (This connection has been closed.). Possibly consider using a shorter maxLifetime value.

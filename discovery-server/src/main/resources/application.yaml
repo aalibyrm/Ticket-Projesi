@@ -1,14 +1,29 @@
 server:
-  port: 8761 
+  port: 8761
 
 spring:
   application:
-    name: discovery-server 
+    name: discovery-server
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
 eureka:
   client:
-    register-with-eureka: false 
-    fetch-registry: false       
+    register-with-eureka: false
+    fetch-registry: false
     service-url:
-       defaultZone: http://localhost:8761/eureka/ 
+      defaultZone: http://localhost:8761/eureka/
   server:
-    wait-time-in-ms-when-sync-empty: 0 
+    wait-time-in-ms-when-sync-empty: 0
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, metrics, prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: ${JAEGER_OTLP_ENDPOINT:http://localhost:4318/v1/traces}
