@@ -86,6 +86,37 @@
         </dependencies>
     </dependencyManagement>
 
+    <!-- ============================================================
+         Tum servisler tarafindan miras alinan ortak bagimliliklar
+         Spring Boot BOM versiyonlari yonetir, elle belirtmeye gerek yok
+         ============================================================ -->
+    <dependencies>
+        <!-- Actuator: health, metrics ve tracing altyapisi icin gerekli -->
+        <!-- logback exclusion: proje genelinde log4j2 kullaniliyor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- Micrometer -> OpenTelemetry koprusu: Spring Boot tracing API'yi OTel'e cevirir -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
+        </dependency>
+
+        <!-- OTLP Exporter: Trace'leri Jaeger'a OTLP protokoluyle gonderir -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+    </dependencies>
+
     <!-- Camunda artifact deposu: zeebe-client-java icin gerekli -->
     <repositories>
         <repository>
