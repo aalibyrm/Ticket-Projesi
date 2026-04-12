@@ -58,6 +58,12 @@
 			<artifactId>ticket-common</artifactId>
 		</dependency>
 
+		<!-- E-posta gonderimi icin JavaMailSender -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<!-- Resilience4j Circuit Breaker: UserClient hata toleransi -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>

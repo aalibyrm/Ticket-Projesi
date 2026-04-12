@@ -17,3 +17,10 @@ eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://discovery-server:8761/eureka/}
+
+spring:
+  mail:
+    host: ${MAIL_HOST:mailpit}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}

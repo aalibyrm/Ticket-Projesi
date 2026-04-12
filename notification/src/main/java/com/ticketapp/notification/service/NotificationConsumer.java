@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class NotificationConsumer {
 
 	private final UserClient userClient;
+	private final EmailService emailService;
 
 	@KafkaListener(topics = "ticket-status-topic", groupId = "notification-group")
 	public void consumeMessage(TicketEventDto event) {
@@ -25,12 +26,18 @@ public class NotificationConsumer {
 					user.getFirstName(), user.getLastName(),
 					event.getMessage(), event.getStatus());
 
+			emailService.sendTicketStatusEmail(
+					user.getEmail(),
+					user.getFirstName(),
+					user.getLastName(),
+					event.getStatus(),
+					event.getMessage()
+			);
+
 		} catch (Exception e) {
 			log.error("Feign Hatasi - kullanici bilgileri cekilemedi. userId={}, hata={}",
 					event.getUserId(), e.getMessage(), e);
 			log.warn("Ham veri isleniyor: userId={}, status={}", event.getUserId(), event.getStatus());
 		}
-
-		// Mail atma eklenecek
 	}
 }
