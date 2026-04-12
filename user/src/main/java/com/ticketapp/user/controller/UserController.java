@@ -1,6 +1,6 @@
 package com.ticketapp.user.controller;
 
-import com.ticketapp.user.dto.UserDto;
+import com.ticketapp.common.dto.UserDto;
 import com.ticketapp.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

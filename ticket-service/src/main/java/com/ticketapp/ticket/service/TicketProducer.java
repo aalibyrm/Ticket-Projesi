@@ -1,6 +1,6 @@
 package com.ticketapp.ticket.service;
 
-import com.ticketapp.ticket.dto.TicketEventDto;
+import com.ticketapp.common.dto.TicketEventDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

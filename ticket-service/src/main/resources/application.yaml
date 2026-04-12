@@ -4,47 +4,32 @@ server:
 spring:
   application:
     name: ticket-service
-  
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8180/realms/TicketRealm
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   kafka:
-   bootstrap-servers: localhost:9092
-   producer:
-     key-serializer: org.apache.kafka.common.serialization.StringSerializer
-     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-     properties:
-      spring.json.add.type.headers: false
-  # --- VERİTABANI AYARLARI ---
-  datasource:
-    # Docker 5432 portunu dışarı açtığı için 'localhost' kullanıyoruz
-    url: jdbc:postgresql://localhost:5432/ticketdb 
-    username: admin      # docker-compose.yml dosyasındaki ile AYNI olmalı
-    password: password   # docker-compose.yml dosyasındaki ile AYNI olmalı
-    driver-class-name: org.postgresql.Driver
-  
-  # --- JPA / HIBERNATE AYARLARI ---
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update  # Entity sınıflarını otomatik tabloya çevirir
-    show-sql: true      # SQL sorgularını konsolda görelim
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
 
-logging:
- level:
-     root: INFO
-     org.springframework.security: TRACE
-     org.springframework.cloud.gateway: TRACE
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+feign:
+  circuitbreaker:
+    enabled: true
 
-zeebe:
-  client:
-    broker:
-      gateway-address: localhost:26500
-    security:
-      plaintext: true
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      support-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true

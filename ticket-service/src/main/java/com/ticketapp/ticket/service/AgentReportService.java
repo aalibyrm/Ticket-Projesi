@@ -1,7 +1,7 @@
 package com.ticketapp.ticket.service;
 
 import com.ticketapp.ticket.dto.AgentPerformanceDto;
-import com.ticketapp.ticket.interfaces.UserClient;
+import com.ticketapp.ticket.client.UserClient;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.SlaViolationRepository;
 import com.ticketapp.ticket.repository.TicketRepository;

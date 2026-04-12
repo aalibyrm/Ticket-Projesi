@@ -5,7 +5,7 @@ import com.ticketapp.ticket.dto.CommentResponseDto;
 import com.ticketapp.ticket.exception.CommentNotFoundException;
 import com.ticketapp.ticket.exception.TicketNotFoundException;
 import com.ticketapp.common.exception.UnauthorizedAccessException;
-import com.ticketapp.ticket.interfaces.CommentMapper;
+import com.ticketapp.ticket.mapper.CommentMapper;
 import com.ticketapp.ticket.model.Comment;
 import com.ticketapp.ticket.model.CommentType;
 import com.ticketapp.ticket.model.Ticket;

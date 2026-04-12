@@ -4,12 +4,8 @@ server:
 spring:
   application:
     name: api-gateway
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8180/realms/TicketRealm
-          jwk-set-uri: http://localhost:8180/realms/TicketRealm/protocol/openid-connect/certs
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   cloud:
     gateway:
       discovery:
@@ -33,13 +29,3 @@ spring:
           uri: lb://USER-SERVICE
           predicates:
             - Path=/api/v1/users/**
-logging:
-  level:
-    root: INFO
-    org.springframework.security: TRACE
-    org.springframework.cloud.gateway: TRACE
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/

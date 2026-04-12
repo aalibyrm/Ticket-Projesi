@@ -1,8 +1,8 @@
 package com.ticketapp.notification.service;
 
+import com.ticketapp.common.dto.TicketEventDto;
+import com.ticketapp.common.dto.UserDto;
 import com.ticketapp.notification.client.UserClient;
-import com.ticketapp.notification.dto.TicketEventDto;
-import com.ticketapp.notification.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

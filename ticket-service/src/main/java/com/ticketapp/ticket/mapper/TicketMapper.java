@@ -1,4 +1,4 @@
-package com.ticketapp.ticket.interfaces;
+package com.ticketapp.ticket.mapper;
 
 import com.ticketapp.ticket.dto.CommentResponseDto;
 import com.ticketapp.ticket.dto.TicketDetailDto;
@@ -13,6 +13,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface TicketMapper {
+
     @Mapping(source = "comments", target = "comments")
     TicketDetailDto toTicketDetailDto(Ticket ticket, List<CommentResponseDto> comments);
 
@@ -21,5 +22,4 @@ public interface TicketMapper {
     TicketResponseDto toTicketResponseDto(Ticket ticket);
 
     List<TicketResponseDto> toTicketResponseDtoList(List<Ticket> ticketList);
-
 }

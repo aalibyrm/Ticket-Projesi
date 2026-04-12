@@ -1,11 +1,12 @@
 package com.ticketapp.ticket.service;
 
+import com.ticketapp.common.dto.TicketEventDto;
 import com.ticketapp.ticket.dto.*;
 import com.ticketapp.ticket.exception.InvalidTicketStateException;
 import com.ticketapp.ticket.exception.TicketNotFoundException;
 import com.ticketapp.common.exception.UnauthorizedAccessException;
-import com.ticketapp.ticket.interfaces.SupportClient;
-import com.ticketapp.ticket.interfaces.TicketMapper;
+import com.ticketapp.ticket.client.SupportClient;
+import com.ticketapp.ticket.mapper.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;

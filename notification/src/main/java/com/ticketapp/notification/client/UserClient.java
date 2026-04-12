@@ -1,11 +1,11 @@
 package com.ticketapp.notification.client;
 
-import com.ticketapp.notification.dto.UserDto;
+import com.ticketapp.common.dto.UserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "user-service", configuration = FeignClientConfig.class)
+@FeignClient(name = "user-service", configuration = FeignClientConfig.class, fallback = UserClientFallback.class)
 public interface UserClient {
 
     @GetMapping("/api/v1/users/{id}")

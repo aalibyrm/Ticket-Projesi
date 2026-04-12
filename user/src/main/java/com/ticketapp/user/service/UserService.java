@@ -1,6 +1,6 @@
 package com.ticketapp.user.service;
 
-import com.ticketapp.user.dto.UserDto;
+import com.ticketapp.common.dto.UserDto;
 import com.ticketapp.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ public class UserService {
             return new UserDto(
                     userResource.getId(),
                     userResource.getUsername(),
+                    userResource.getEmail(),
                     userResource.getFirstName(),
                     userResource.getLastName()
             );

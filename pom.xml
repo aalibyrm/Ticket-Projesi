@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.3</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.ticketapp</groupId>
+    <artifactId>ticket-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>ticket-parent</name>
+    <description>Ticket uygulamasi mikroservisleri icin merkezi Parent POM</description>
+
+    <modules>
+        <module>ticket-common</module>
+        <module>discovery-server</module>
+        <module>api-gateway</module>
+        <module>support-service</module>
+        <module>ticket-service</module>
+        <module>user</module>
+        <module>notification</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <spring-cloud.version>2025.1.0</spring-cloud.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <zeebe.version>8.6.0</zeebe.version>
+        <keycloak-admin.version>22.0.1</keycloak-admin.version>
+        <ticket-common.version>1.0.0</ticket-common.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud BOM: tum Spring Cloud starter versiyonlarini yonetir -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Paylasilan uygulama kutuphanesi -->
+            <dependency>
+                <groupId>com.ticketapp</groupId>
+                <artifactId>ticket-common</artifactId>
+                <version>${ticket-common.version}</version>
+            </dependency>
+
+            <!-- MapStruct: Java bean mapping -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <!-- Zeebe: Camunda 8 istemcisi -->
+            <dependency>
+                <groupId>io.camunda</groupId>
+                <artifactId>zeebe-client-java</artifactId>
+                <version>${zeebe.version}</version>
+            </dependency>
+
+            <!-- Keycloak admin istemcisi (user-service icin) -->
+            <dependency>
+                <groupId>org.keycloak</groupId>
+                <artifactId>keycloak-admin-client</artifactId>
+                <version>${keycloak-admin.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!-- Camunda artifact deposu: zeebe-client-java icin gerekli -->
+    <repositories>
+        <repository>
+            <id>camunda-nexus</id>
+            <name>Camunda Public Repository</name>
+            <url>https://artifacts.camunda.com/artifactory/public/</url>
+        </repository>
+    </repositories>
+
+</project>

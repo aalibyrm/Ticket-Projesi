@@ -4,22 +4,10 @@ server:
 spring:
   application:
     name: notification-service
-  
-
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: notification-service
-            client-secret: vIyH8ugPFVrrFU9EzNg0Y6t94vHN5ycy
-            authorization-grant-type: client_credentials
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:8180/realms/TicketRealm
-
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     consumer:
       group-id: notification-group-v2
       auto-offset-reset: earliest
@@ -28,9 +16,18 @@ spring:
       properties:
         spring.json.trusted.packages: "*"
         spring.json.use.type.headers: false
-        spring.json.value.default.type: com.ticketapp.notification.dto.TicketEventDto
+        spring.json.value.default.type: com.ticketapp.common.dto.TicketEventDto
 
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
+feign:
+  circuitbreaker:
+    enabled: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      user-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
