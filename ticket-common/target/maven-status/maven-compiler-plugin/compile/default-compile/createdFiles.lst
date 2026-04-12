@@ -1,0 +1,6 @@
+com\ticketapp\common\exception\ErrorResponse.class
+com\ticketapp\common\exception\BaseException.class
+com\ticketapp\common\exception\ResourceNotFoundException.class
+com\ticketapp\common\exception\UnauthorizedAccessException.class
+com\ticketapp\common\exception\BusinessRuleException.class
+com\ticketapp\common\exception\GlobalExceptionHandler.class

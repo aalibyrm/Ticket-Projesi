@@ -3,6 +3,9 @@ package com.ticketapp.support.service;
 import com.ticketapp.support.dto.TeamMemberResDto;
 import com.ticketapp.support.dto.TeamRequestDto;
 import com.ticketapp.support.dto.TeamResponseDto;
+import com.ticketapp.support.exception.DepartmentNotFoundException;
+import com.ticketapp.support.exception.DuplicateResourceException;
+import com.ticketapp.support.exception.TeamNotFoundException;
 import com.ticketapp.support.interfaces.TeamMapper;
 import com.ticketapp.support.interfaces.TeamMemberMapper;
 import com.ticketapp.support.model.Department;
@@ -30,11 +33,14 @@ public class TeamService {
     public TeamResponseDto createTeam(TeamRequestDto teamRequestDto) {
 
         if (teamRepository.existsByName(teamRequestDto.getName())) {
-            throw new RuntimeException("Bu team zaten var!");
+            throw new DuplicateResourceException(
+                    "DUPLICATE_TEAM",
+                    "Bu team zaten var: " + teamRequestDto.getName()
+            );
         }
 
         Department department = departmentRepository.findDepartmentByName(teamRequestDto.getDepartmentName())
-                .orElseThrow(() -> new RuntimeException("Department bulunamadı"));
+                .orElseThrow(() -> new DepartmentNotFoundException(teamRequestDto.getDepartmentName()));
 
         Team team = teamMapper.teamDto(teamRequestDto);
         team.setDepartment(department);
@@ -45,10 +51,13 @@ public class TeamService {
 
     public TeamMemberResDto addMember(Long teamId, String keycloakUserId) {
         Team team = teamRepository.findById(teamId)
-                .orElseThrow(() -> new RuntimeException("Team bulunamadı!"));
+                .orElseThrow(() -> new TeamNotFoundException(teamId.toString()));
 
         if (teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId)) {
-            throw new RuntimeException("Bu kullanıcı zaten ekipte!");
+            throw new DuplicateResourceException(
+                    "DUPLICATE_TEAM_MEMBER",
+                    "Bu kullanici zaten ekipte: " + keycloakUserId
+            );
         }
 
         TeamMember teamMember = new TeamMember();
@@ -62,7 +71,9 @@ public class TeamService {
 
     public void removeMember(Long teamId, String keycloakUserId) {
         if (!teamMemberRepository.existsByTeamIdAndKeycloakUserId(teamId, keycloakUserId)) {
-            throw new RuntimeException("Kullanıcı bu ekipten değil!");
+            throw new TeamNotFoundException(
+                    "Kullanici bu ekipte bulunamadi: " + keycloakUserId + " (team: " + teamId + ")"
+            );
         }
 
         TeamMember teamMember = teamMemberRepository.findByTeamIdAndKeycloakUserId(teamId, keycloakUserId);
@@ -82,7 +93,7 @@ public class TeamService {
     public TeamResponseDto assignTeam(Long departmentId){
         List<Team> teams = teamRepository.findTeamsByDepartmentId(departmentId);
         if (teams.isEmpty()) {
-            throw new RuntimeException("Bu departmanda ekip bulunamadı!");
+            throw new TeamNotFoundException("Bu departmanda ekip bulunamadi: " + departmentId);
         }
 
         int randomIndex = ThreadLocalRandom.current().nextInt(teams.size());

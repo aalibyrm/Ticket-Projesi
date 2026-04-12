@@ -1,0 +1,6 @@
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\BaseException.java
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\BusinessRuleException.java
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\ErrorResponse.java
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\GlobalExceptionHandler.java
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\ResourceNotFoundException.java
+C:\spring-workspace\Proje\ticket-common\src\main\java\com\ticketapp\common\exception\UnauthorizedAccessException.java

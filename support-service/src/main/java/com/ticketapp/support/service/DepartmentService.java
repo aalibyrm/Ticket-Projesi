@@ -1,6 +1,9 @@
 package com.ticketapp.support.service;
 
 import com.ticketapp.support.dto.*;
+import com.ticketapp.support.exception.DepartmentNotFoundException;
+import com.ticketapp.support.exception.DuplicateResourceException;
+import com.ticketapp.support.exception.TopicNotFoundException;
 import com.ticketapp.support.interfaces.DepartmentMapper;
 import com.ticketapp.support.interfaces.TeamMapper;
 import com.ticketapp.support.interfaces.TopicMapper;
@@ -29,16 +32,19 @@ public class DepartmentService {
     public DepartmentResponseDto findDepartmentByTopic(Long topicId) {
 
         Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new RuntimeException("Topic bulunamadı: " + topicId));
+                .orElseThrow(() -> new TopicNotFoundException(topicId.toString()));
 
-        // Topic zaten deparment tuttuğu için return edilir
+        // Topic zaten department tuttuğu için return edilir
         return departmentMapper.departmentResponseDto(topic.getDepartment());
     }
 
     public DepartmentResponseDto createDepartment(DepartmentRequestDto departmentRequestDto) {
 
         if (departmentRepository.existsByName(departmentRequestDto.getName())) {
-            throw new RuntimeException("Bu departman zaten var!");
+            throw new DuplicateResourceException(
+                    "DUPLICATE_DEPARTMENT",
+                    "Bu departman zaten var: " + departmentRequestDto.getName()
+            );
         }
 
         Department department = departmentMapper.departmentDto(departmentRequestDto);
@@ -50,11 +56,14 @@ public class DepartmentService {
     public TopicResponseDto addTopicToDepartment(Long departmentId, TopicRequestDto topicRequestDto) {
 
         Department department = departmentRepository.findById(departmentId)
-                .orElseThrow(() -> new RuntimeException("Department bulunamadı"));
+                .orElseThrow(() -> new DepartmentNotFoundException(departmentId.toString()));
 
         if (department.getTopicList().stream()
                 .anyMatch(t -> t.getName().equals(topicRequestDto.getName()))) {
-            throw new RuntimeException("Departman zaten bu topic'e sahip!");
+            throw new DuplicateResourceException(
+                    "DUPLICATE_TOPIC",
+                    "Departman zaten bu topic'e sahip: " + topicRequestDto.getName()
+            );
         }
 
         Topic topic = topicMapper.topicDto(topicRequestDto);
@@ -68,10 +77,8 @@ public class DepartmentService {
         return departmentMapper.toResponseDtoList(departmentRepository.findAll());
     }
 
-    public List<TeamResponseDto> getTeamsByDepartment(Long departmentId){
+    public List<TeamResponseDto> getTeamsByDepartment(Long departmentId) {
         List<Team> teams = teamRepository.findTeamsByDepartmentId(departmentId);
-
         return teamMapper.toResponseDto(teams);
     }
-
 }

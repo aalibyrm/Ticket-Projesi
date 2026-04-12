@@ -3,7 +3,7 @@ package com.ticketapp.ticket.service;
 import com.ticketapp.ticket.dto.*;
 import com.ticketapp.ticket.exception.InvalidTicketStateException;
 import com.ticketapp.ticket.exception.TicketNotFoundException;
-import com.ticketapp.ticket.exception.UnauthorizedAccessException;
+import com.ticketapp.common.exception.UnauthorizedAccessException;
 import com.ticketapp.ticket.interfaces.SupportClient;
 import com.ticketapp.ticket.interfaces.TicketMapper;
 import com.ticketapp.ticket.model.Ticket;

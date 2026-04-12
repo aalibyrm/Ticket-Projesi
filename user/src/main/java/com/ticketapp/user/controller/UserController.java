@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ticketapp.user.dto.UserDto;
+import com.ticketapp.user.exception.UserNotFoundException;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -32,7 +33,7 @@ public class UserController {
                 userResource.getLastName()
             );
         } catch (Exception e) {
-            throw new RuntimeException("Kullanıcı Keycloak üzerinde bulunamadı: " + id);
+            throw new UserNotFoundException(id);
         }
     }
 }
