@@ -5,6 +5,7 @@ import com.ticketapp.support.dto.TeamMemberResDto;
 import com.ticketapp.support.dto.TeamRequestDto;
 import com.ticketapp.support.dto.TeamResponseDto;
 import com.ticketapp.support.service.TeamService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,13 @@ public class TeamController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TeamResponseDto createTeam(@RequestBody TeamRequestDto dto) {
+    public TeamResponseDto createTeam(@Valid @RequestBody TeamRequestDto dto) {
         return teamService.createTeam(dto);
     }
 
     @PostMapping("/{teamId}/members")
     @ResponseStatus(HttpStatus.CREATED)
-    public TeamMemberResDto addMember(@PathVariable Long teamId, @RequestBody TeamMemberReqDto dto) {
+    public TeamMemberResDto addMember(@PathVariable Long teamId, @Valid @RequestBody TeamMemberReqDto dto) {
         return teamService.addMember(teamId, dto.getKeycloakUserId());
     }
 

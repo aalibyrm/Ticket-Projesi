@@ -21,10 +21,18 @@ spring:
           uri: lb://TICKET-SERVICE
           predicates:
             - Path=/api/v1/tickets/**
+        - id: ticket-service-reports
+          uri: lb://TICKET-SERVICE
+          predicates:
+            - Path=/api/v1/reports/**
         - id: support-service
           uri: lb://SUPPORT-SERVICE
           predicates:
             - Path=/api/v1/departments/**,/api/v1/teams/**
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/v1/users/**
 logging:
   level:
     root: INFO

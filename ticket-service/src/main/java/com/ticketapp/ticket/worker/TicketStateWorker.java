@@ -4,6 +4,7 @@ import com.ticketapp.ticket.exception.TicketNotFoundException;
 import com.ticketapp.ticket.model.Ticket;
 import com.ticketapp.ticket.model.TicketStatus;
 import com.ticketapp.ticket.repository.TicketRepository;
+import com.ticketapp.ticket.util.SlaCalculator;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
@@ -49,19 +50,9 @@ public class TicketStateWorker {
         Map<String, Object> variables = activatedJob.getVariablesAsMap();
         String ticketId = (String) variables.get("ticketId");
         String priority = (String) variables.get("priority");
-        String slaRemainingDuration;
-        String slaWarningDuration;
 
-        if ("HIGH".equals(priority)) {
-            slaRemainingDuration = "PT4H";
-            slaWarningDuration = "PT3H";
-        } else if ("MEDIUM".equals(priority)) {
-            slaRemainingDuration = "PT8H";
-            slaWarningDuration = "PT6H";
-        } else {
-            slaRemainingDuration = "PT24H";
-            slaWarningDuration = "PT20H";
-        }
+        String slaRemainingDuration = SlaCalculator.getSlaDuration(priority);
+        String slaWarningDuration = SlaCalculator.getSlaWarningDuration(priority);
 
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException(ticketId));
@@ -96,15 +87,11 @@ public class TicketStateWorker {
 
         if (slaRemainingDuration == null || slaWarningDuration == null) {
             String priority = ticket.getPriority() != null ? ticket.getPriority().name() : "LOW";
-            if ("HIGH".equals(priority)) {
-                slaRemainingDuration = slaRemainingDuration != null ? slaRemainingDuration : "PT4H";
-                slaWarningDuration = slaWarningDuration != null ? slaWarningDuration : "PT3H";
-            } else if ("MEDIUM".equals(priority)) {
-                slaRemainingDuration = slaRemainingDuration != null ? slaRemainingDuration : "PT8H";
-                slaWarningDuration = slaWarningDuration != null ? slaWarningDuration : "PT6H";
-            } else {
-                slaRemainingDuration = slaRemainingDuration != null ? slaRemainingDuration : "PT24H";
-                slaWarningDuration = slaWarningDuration != null ? slaWarningDuration : "PT20H";
+            if (slaRemainingDuration == null) {
+                slaRemainingDuration = SlaCalculator.getSlaDuration(priority);
+            }
+            if (slaWarningDuration == null) {
+                slaWarningDuration = SlaCalculator.getSlaWarningDuration(priority);
             }
         }
 

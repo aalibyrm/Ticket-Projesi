@@ -2,10 +2,13 @@ package com.ticketapp.ticket.controller;
 
 import java.util.List;
 
+import com.ticketapp.ticket.dto.CommentResponseDto;
 import com.ticketapp.ticket.dto.TicketDetailDto;
 import com.ticketapp.ticket.dto.TicketRequestDto;
 import com.ticketapp.ticket.dto.TicketResponseDto;
+import com.ticketapp.ticket.service.CommentService;
 import com.ticketapp.ticket.service.TicketService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,11 +30,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final CommentService commentService;
 
     // Ticket Oluşturma Methodu
     @PostMapping("create-ticket")
     @PreAuthorize("hasRole('CUSTOMER')")
-    public TicketResponseDto createTicket(@RequestBody TicketRequestDto requestDto, @AuthenticationPrincipal Jwt jwt) {
+    public TicketResponseDto createTicket(@Valid @RequestBody TicketRequestDto requestDto, @AuthenticationPrincipal Jwt jwt) {
 
         return ticketService.createTicket(requestDto, jwt.getSubject());
     }
@@ -83,6 +87,17 @@ public class TicketController {
     public TicketDetailDto ticketDetails(@PathVariable String ticketId, @AuthenticationPrincipal Jwt jwt) {
         var role = jwt.getClaimAsMap("realm_access").get("roles").toString();
 
-        return ticketService.ticketDetails(ticketId, jwt.getSubject(), role);
+        TicketResponseDto ticket = ticketService.getTicketById(ticketId, jwt.getSubject(), role);
+        List<CommentResponseDto> comments = commentService.getCommentsByTicketId(ticketId, role);
+        return new TicketDetailDto(
+                ticket.getId(),
+                ticket.getTitle(),
+                ticket.getDescription(),
+                ticket.getStatus(),
+                ticket.getPriority(),
+                ticket.getCreatedDate(),
+                ticket.getUserId(),
+                comments
+        );
     }
 }

@@ -12,6 +12,7 @@ import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,12 +23,12 @@ public class TicketService {
 
     private final TicketRepository ticketRepository;
     private final TicketProducer ticketProducer;
-    private final CommentService commentService;
     private final TicketMapper ticketMapper;
     private final SupportClient supportClient;
     private final TicketProcessService ticketProcessService;
     private final CamundaMessageService camundaMessageService;
 
+    @Transactional
     public TicketResponseDto createTicket(TicketRequestDto requestDto, String userId) {
         DepartmentResponseDto departmentResponseDto = supportClient.getDepartmentByTopic(requestDto.getTopicId());
         TeamResponseDto teamResponseDto = supportClient.assignTeam(departmentResponseDto.getId());
@@ -64,6 +65,7 @@ public class TicketService {
         return ticketMapper.toTicketResponseDtoList(ticketList);
     }
 
+    @Transactional
     public void deleteTicket(String id) {
 
         Ticket ticket = ticketRepository.findById(id)
@@ -79,6 +81,7 @@ public class TicketService {
         ticketRepository.deleteById(id);
     }
 
+    @Transactional
     public TicketResponseDto assignTicket(String ticketId, String agentId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
@@ -102,6 +105,7 @@ public class TicketService {
         return ticketMapper.toTicketResponseDto(savedTicket);
     }
 
+    @Transactional
     public TicketResponseDto sendToApproval(String id, String agentId) {
         Ticket ticket = ticketRepository.findById(id)
                 .orElseThrow(() -> new TicketNotFoundException(id));
@@ -125,6 +129,7 @@ public class TicketService {
         return ticketMapper.toTicketResponseDto(ticket);
     }
 
+    @Transactional
     public TicketResponseDto customerDecision(String ticketId, boolean approved, String userId) {
 
         Ticket ticket = ticketRepository.findById(ticketId)
@@ -162,7 +167,7 @@ public class TicketService {
         return ticketMapper.toTicketResponseDto(ticket);
     }
 
-    public TicketDetailDto ticketDetails(String ticketId, String userId, String role) {
+    public TicketResponseDto getTicketById(String ticketId, String userId, String role) {
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new TicketNotFoundException(ticketId));
 
@@ -170,8 +175,6 @@ public class TicketService {
             throw new UnauthorizedAccessException("Bu ticket detaylarini gormeye yetkiniz yok!");
         }
 
-        List<CommentResponseDto> commentList = commentService.getCommentsByTicketId(ticketId, role);
-
-        return ticketMapper.toTicketDetailDto(ticket, commentList);
+        return ticketMapper.toTicketResponseDto(ticket);
     }
 }

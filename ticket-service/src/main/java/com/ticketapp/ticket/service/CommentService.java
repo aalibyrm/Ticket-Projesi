@@ -14,6 +14,7 @@ import com.ticketapp.ticket.repository.TicketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class CommentService {
     private final TicketRepository ticketRepository;
     private final CommentMapper commentMapper;
 
+    @Transactional
     public CommentResponseDto createComment(String ticketId, CommentRequestDto request, String userId) {
         // Musteri icin kendisinin olmayan ticketa yorum atma kontrolu eklenecek
         if (ticketRepository.findById(ticketId).isEmpty()) {
@@ -56,6 +58,7 @@ public class CommentService {
         }
     }
 
+    @Transactional
     public CommentResponseDto editComment(String ticketId, String commentId, String userId, CommentRequestDto request,
             String role, boolean changeType) {
 
